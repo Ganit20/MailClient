@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -23,10 +24,11 @@ namespace MailClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static ConfigModel Config;
         public MainWindow()
         {
             InitializeComponent();
-            
+            Config = new Configure().LoadConfig();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,6 +36,12 @@ namespace MailClient
 
             new Login().ToMail(new User() { Mail = Email.Text, Password = Password.Password }, this);
                 
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Config cfg = new Config(Config);
+            cfg.ShowDialog();
         }
     }
 }

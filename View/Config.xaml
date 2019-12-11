@@ -1,0 +1,43 @@
+﻿<Window x:Class="MailClient.View.Config"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MailClient.View"
+        mc:Ignorable="d"
+        Title="Config" Height="200" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="0.05*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="ImapServer" Grid.Row="1" Grid.Column="1"   TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox x:Name="ImapPort" Grid.Row="2" Grid.Column="1"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
+        <TextBox x:Name="SmtpServer" Grid.Row="1" Grid.Column="3"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox x:Name="SmtpPort" Grid.Row="2" Grid.Column="3"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Imap Server" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="Imap Port" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="2" Grid.Column="3" Text="Smtp Port" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="1" Grid.Column="3" Text="Smtp Server" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Grid Grid.Row="3" Grid.Column="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Save" Grid.Column="1" Grid.Row="1" Click="Button_Click"/>
+        </Grid>
+        <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" x:Name="Error"/>
+    </Grid>
+    
+</Window>

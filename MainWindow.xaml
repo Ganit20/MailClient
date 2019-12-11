@@ -11,7 +11,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="1.6*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
@@ -19,11 +20,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" x:FieldModifier="public" x:Name="Email" TextWrapping="Wrap" />
         <PasswordBox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" x:FieldModifier="public" x:Name="Password"/>
-        <Button Content="Button" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="3" Click="Button_Click" Height="33"/>
+        <Button Content="Config" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="3" Click="Button_Click" Height="33"/>
         <TextBlock x:FieldModifier="public" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" x:Name="Info" TextWrapping="Wrap"/>
+        <Button Content="Config" Grid.Column="2" Grid.Row="3" Click="Button_Click_1"/>
 
     </Grid>
 </Window>
