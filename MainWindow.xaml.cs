@@ -1,41 +1,40 @@
 ﻿using MailClient.Model;
 using MailClient.View;
 using MailClient.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace MailClient
-{
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+{ 
     public partial class MainWindow : Window
     {
         public static ConfigModel Config;
+        public static User user;
         public MainWindow()
         {
             InitializeComponent();
+            user = new RememberMe().Load();
+            if(user != null){
+                Email.Text = user.Mail;
+                Password.Password = user.Password;
+            }
             Config = new Configure().LoadConfig();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
-            new Login().ToMail(new User() { Mail = Email.Text, Password = Password.Password }, this);
-                
+            var user = new User()
+            {
+                Mail = Email.Text,
+                Password = Password.Password
+            };
+            new Login().ToMail(user, this);
+            if(Remember.IsChecked.Value)
+            {
+                new RememberMe().Save(user);
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

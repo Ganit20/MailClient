@@ -28,6 +28,7 @@ namespace MailClient.ViewModel
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     await client.ConnectAsync(Config.ImapServer, Config.ImapPort);
                     client.Authenticate(user.Mail, user.Password);
+                    client.Disconnect(true);               
                     loginpage.Content = new Inbox(user,Config);
 
                 }

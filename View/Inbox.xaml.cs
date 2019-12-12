@@ -1,6 +1,8 @@
 ﻿using MailClient.Model;
 using MailClient.ViewModel;
+using MailKit;
 using MailKit.Net.Imap;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,46 +14,63 @@ namespace MailClient.View
     /// </summary>
     public partial class Inbox : Page
     {
-        User UserData;
-        MessageInbox Msgs;
-        ConfigModel Config;
-        public Inbox(User user,ConfigModel config)
+        static User UserData;
+
+        static ConfigModel Config;
+        public Inbox(User user, ConfigModel config)
         {
             var dispatcher = this.Dispatcher;
             Config = config;
             UserData = user;
             InitializeComponent();
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
             {
-                new ListMessages().DownloadFoldersAsync(user,Config, this);
+              await  new ListMessages().DownloadFolders(user, Config, this);
 
             });
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
             {
-                Msgs = new ListMessages().DownloadMessages(user, Config, this);
+             await   new ListMessages().DownloadMessagesAsync(user, Config, this);
             });
-            }
+            DataContext = Message.GetMailList();
+        }
 
         private void Messages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Messages.SelectedItem.ToString() == "Load more...")
+            var choosed = (Message)Messages.SelectedItem;
+            if (choosed != null && choosed.Subject == "Load more...")
             {
+                new ListMessages().DownloadMessagesAsync(UserData, Config, this);
+                Message.Mails.Remove(choosed);
 
-            } else {
-                var choosed = Messages.SelectedItem.ToString();
-                var choosed_id = choosed.Substring(0, choosed.IndexOf('.'));
-                int.TryParse(choosed_id, out int msgID);
-                var msg = Msgs.MessageList.Find(e => e.ID == msgID);
-                new ListMessages().OpenMail(msg, this);
-                Body.Visibility = 0;
-                Back.IsEnabled = true;
-            } }
+            }
+        }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Body.Visibility = (Visibility)1;
             Back.IsEnabled = false;
-            
+
+        }
+
+        private void Messages_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var choosed = (Message)Messages.SelectedItem;
+            if (choosed != null && choosed.Subject == "Load more...")
+            {
+                new ListMessages().DownloadMessagesAsync(UserData, Config, this);
+                Message.Mails.Remove(choosed);
+
+            }
+            else
+            {
+                new ListMessages().OpenMail(choosed, this);
+            }
+        }
+
+        private void Folders_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            new ListMessages().DownloadMessagesAsync(UserData, Config, this, (IMailFolder)Folders.SelectedItem);
         }
     }
 }

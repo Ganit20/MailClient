@@ -1,21 +1,17 @@
 ﻿using MailClient.Model;
-using MailClient.View;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace MailClient.ViewModel
 {
-    class Configure
+    internal class Configure
     {
-       public void SaveConfig(ConfigModel conf)
+        public void SaveConfig(ConfigModel conf)
         {
 
-            var config = JsonConvert.SerializeObject(conf);
+            string config = JsonConvert.SerializeObject(conf);
 
-                File.WriteAllText("config.cfg", config);
+            File.WriteAllText("config.cfg", config);
 
         }
         public ConfigModel LoadConfig()
@@ -34,9 +30,9 @@ namespace MailClient.ViewModel
                 }
             }
             return config;
-            
-        } 
-            
+
         }
+
     }
+}
 

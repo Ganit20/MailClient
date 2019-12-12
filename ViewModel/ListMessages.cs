@@ -1,65 +1,76 @@
 ﻿using MailClient.Model;
 using MailClient.View;
+using MailKit;
 using MailKit.Net.Imap;
-using MimeKit.Text;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace MailClient.ViewModel
 {
-    class ListMessages
+    internal class ListMessages
     {
-        public MessageInbox DownloadMessages(User user, ConfigModel conf, Inbox inboxPage)
+        public static int loaded = 0;
+        public static int load = 26;
+        public static string fold = "Inbox";
+        public async Task DownloadMessagesAsync(User user, ConfigModel conf, Inbox inboxPage,IMailFolder Folder=null)
         {
-                using(var client = new ImapClient())
+            using (ImapClient client = new ImapClient())
+            {
+                
+                await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
+                client.Authenticate(user.Mail, user.Password);
+                    if(Folder!=null)
+                {
+                    fold = Folder.FullName;
+                    Message.Mails.Clear();
+                    loaded = 0;
+                }
+                    Folder = client.GetFolder(fold);
+                await Folder.OpenAsync(MailKit.FolderAccess.ReadOnly);
+                for (int i = Folder.Count - (loaded == 0 ? 1 : loaded); i > Folder.Count - (loaded + load); i--)
+                {
+                    string Mail = null, Name = null;
+                    MimeKit.MimeMessage message = Folder.GetMessage(i);
+                    Mail = message.From[0].ToString();
+                    Name = message.From[0].Name.ToString();
+                    new Message().AddMail(new Message
+                    {
+                        ID = i,
+                        Body = !string.IsNullOrEmpty(message.HtmlBody) ? message.HtmlBody : message.TextBody,
+                        FullFrom = message.From.ToString(),
+                        From = !string.IsNullOrEmpty(Name) ? Name : Mail,
+                        Subject = message.Subject,
+                        Time = message.Date.ToString("dd/MM/yyyy") == DateTime.Today.ToString("dd/MM/yyyy") ? message.Date.ToString("HH:mm") : message.Date.ToString("MM/dd/yyyy"),
+                    });
+                }
+                loaded += load;
+
+                inboxPage.Dispatcher.Invoke(() =>
+                {
+                    inboxPage.Messages.ItemsSource = Message.GetMailList();
+                    new Message().AddMail(new Message() { Subject = "Load more..." });
+                });
+                client.Disconnect(true);
+
+            }
+        }
+        public async System.Threading.Tasks.Task DownloadFolders(User user, ConfigModel conf, Inbox InboxPage)
+        {
+            using (var client = new ImapClient())
             {
                 client.Connect(conf.ImapServer, conf.ImapPort);
                 client.Authenticate(user.Mail, user.Password);
-                var inbox = client.Inbox;
-                inbox.Open(MailKit.FolderAccess.ReadWrite);
-                MessageInbox MessageList = new MessageInbox();
-                int load = 26;
-                for (int i = inbox.Count-1; i >inbox.Count-load; i--)
+                var ClientFolders = client.GetFolders(client.PersonalNamespaces[0]);
+
+                for (int i = ClientFolders.Count - 1; i > -1; i--)
                 {
-                    var message = inbox.GetMessage(i);
-                    MessageList.MessageList.Add(new Message {
-                        ID = i,
-                        Body = !string.IsNullOrEmpty(message.HtmlBody) ? message.HtmlBody : message.TextBody,
-                        From = message.From.Mailboxes.ToString(), // message.From.ToString(), 
-                        Subject = message.Subject,
-                        Time = message.Date.ToString() }) ;
-                    inboxPage.Dispatcher.Invoke(() =>
-                    {
-                        inboxPage.Messages.Items.Add($"{i}. {message.From} {message.Subject}");
-                    });
-                    
-                }
-                inboxPage.Dispatcher.Invoke(() =>
-                {
-                    inboxPage.Messages.Items.Add("Load more...");
-                });
-                    client.Disconnect(true);
-                return MessageList;
-            }
-        }
-        public async System.Threading.Tasks.Task DownloadFoldersAsync(User user,ConfigModel conf, Inbox InboxPage)
-        {
-            using(var client =new ImapClient())
-            {
-            client.Connect(conf.ImapServer, conf.ImapPort);
-            client.Authenticate(user.Mail, user.Password);
-            var ClientFolders = client.GetFolders(client.PersonalNamespaces[0]);
-          
-                for(int i = ClientFolders.Count-1; i > -1; i--)
-            {
                     InboxPage.Dispatcher.Invoke(() =>
                     {
                         InboxPage.Folders.Items.Add(ClientFolders[i]);
                     });
-            }
-            client.Disconnect(true);
+                }
+                client.Disconnect(true);
             }
         }
         public void OpenMail(Message m, Inbox inboxPage)
@@ -67,9 +78,10 @@ namespace MailClient.ViewModel
             if (m != null)
             {
                 inboxPage.Body.NavigateToString("<head><meta charset='UTF-8'></head>" + m.Body);
+                inboxPage.Body.Visibility = 0;
+                inboxPage.Back.IsEnabled = true;
             }
-            } 
+        }
 
-        
     }
 }
