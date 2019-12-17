@@ -8,61 +8,86 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Inbox"
       >
- 
-   
+
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="40.909"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListView  x:Name="Messages" x:FieldModifier="public" Grid.Row="1" Grid.Column=" 1" SelectionChanged="Messages_SelectionChanged" MouseDoubleClick="Messages_MouseDoubleClick" Panel.ZIndex="-1">
+        <ListView  x:Name="Messages" x:FieldModifier="public" Grid.Row="1" Grid.Column=" 1" SelectionChanged="Messages_SelectionChanged" MouseDoubleClick="Messages_MouseDoubleClick" Panel.ZIndex="-1" >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Path=Time}"/>
-                    <GridViewColumn Header="From" DisplayMemberBinding="{Binding Path=From}"/>
-                    <GridViewColumn Header="Subject" DisplayMemberBinding="{Binding Path=Subject}"/>
-                </GridView>
+                <GridView >
+                    <GridViewColumn Header="Date">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding Path=MessageColor}" >
+                                    <TextBlock Margin="-6,-1,-6,-1" Padding="5,2,5,5" Grid.Column="0" HorizontalAlignment="Stretch" Text="{Binding Path=Time}" Background="{Binding Path=MessageColor}"/>
+                                     </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="From">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate >
+                                <Grid Background="{Binding Path=MessageColor}">
+                                    <TextBlock Margin="-6,-1,-6,-1" Padding="5,2,5,5" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Path=From}" Background="{Binding Path=MessageColor}"/>
+                                    </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Subject">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding Path=MessageColor}" >
+                                    <TextBlock Margin="-6,-1,-6,-1" Padding="5,2,5,5" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding Path=Subject}" Background="{Binding Path=MessageColor}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                                   </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.05*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="Back" Grid.Column="0" FontFamily="Segoe MDL2 Assets"  IsEnabled="False" Click="Button_Click">&#xE830;</Button>
+
+
+
+        <ToolBar Grid.Column="2" Background="#FFFFCB39">
+            <Button  x:Name="Back" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" IsEnabled="False" Click="Button_Click">&#xE830;</Button>
+            <Button x:Name="Refresh" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Click="Refresh_Button">&#xE72C;</Button>
+            <Label Margin="10,4,10,0">Load:</Label>
+            <TextBlock x:Name="Unread"  x:FieldModifier="public" />
+            <ComboBox x:Name="Load" Margin="0,0,0,0" Grid.Column="1" Grid.ColumnSpan="3"  SelectionChanged="Load_SelectionChanged"/>
+            <TextBlock x:Name="Loading" x:FieldModifier="public" TextWrapping="Wrap"/>
+        </ToolBar>
+        <Grid x:Name="MailBody" x:FieldModifier="public" Visibility="Collapsed" Grid.Row="1" Grid.Column="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Height="Auto" x:Name="Info" x:FieldModifier="public" Background="#FFC59200" Grid.Row="0"/>
+            <WebBrowser x:Name="Body"  Grid.Row="1"   Panel.ZIndex="0"  ></WebBrowser>
+            <StackPanel Height="Auto" x:Name="Attachments" x:FieldModifier="public" Background="#FFC59200" Grid.Row="2"/>
         </Grid>
-       
-        <WebBrowser x:Name="Body"  Grid.Column="1" Grid.Row="1" Visibility="Hidden"  Panel.ZIndex="0" />
-        <ListView Grid.Row="1" x:Name="Folders" x:FieldModifier="public" SelectionChanged="Folders_SelectionChanged"  >
+        <ListView Grid.Row="1"  x:Name="Folders" x:FieldModifier="public" SelectionChanged="Folders_SelectionChanged" Background="#FFFFCB39"  >
             <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Folders" />
+                <GridView >
+                    <GridViewColumn  Header="Folders" />
                 </GridView>
             </ListView.View>
-            
+
         </ListView>
+        
 
     </Grid>
 </Page>

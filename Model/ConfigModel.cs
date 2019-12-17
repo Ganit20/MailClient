@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace MailClient.Model
 {
@@ -10,5 +8,15 @@ namespace MailClient.Model
         public string ImapServer { get; set; }
         public string SmtpServer { get; set; }
         public int SmtpPort { get; set; }
+        public static ObservableCollection<int> LoadNumber = new ObservableCollection<int>();
+        public ConfigModel()
+        {
+            LoadNumber.Add(25);
+            LoadNumber.Add(50);
+            LoadNumber.Add(75);
+            LoadNumber.Add(100);
+            LoadNumber.Add(200);
+        }
+
     }
 }

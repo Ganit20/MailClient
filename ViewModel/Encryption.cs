@@ -2,11 +2,10 @@
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace MailClient
 {
-    class Encryption
+    internal class Encryption
     {
         public byte[] Encrypt(string original)
         {
@@ -35,21 +34,30 @@ namespace MailClient
             throw new NotImplementedException();
         }
 
-        static byte[] EncryptStringToBytes_Aes(string Text)
+        private static byte[] EncryptStringToBytes_Aes(string Text)
         {
-            var parkey = "48206829429835727543309257482014";
-            var Vector = "8532744676923527";
-            using (var aesManag = Aes.Create())
+            string parkey = "48206829429835727543309257482014";
+            string Vector = "8532744676923527";
+            using (Aes aesManag = Aes.Create())
             {
                 aesManag.KeySize = 256;
 
             }
             if (Text == null || Text.Length <= 0)
+            {
                 throw new ArgumentNullException("plainText");
+            }
+
             if (parkey == null || parkey.Length <= 0)
+            {
                 throw new ArgumentNullException("Key");
+            }
+
             if (Vector == null || Vector.Length <= 0)
+            {
                 throw new ArgumentNullException("IV");
+            }
+
             byte[] encrypted;
 
             using (Aes aesAlg = Aes.Create())
@@ -78,16 +86,24 @@ namespace MailClient
 
         }
 
-        static string DecryptStringFromBytes_Aes(byte[] cipherText)
+        private static string DecryptStringFromBytes_Aes(byte[] cipherText)
         {
-            var parkey = "48206829429835727543309257482014";
-            var Vector = "8532744676923527";
+            string parkey = "48206829429835727543309257482014";
+            string Vector = "8532744676923527";
             if (cipherText == null || cipherText.Length <= 0)
+            {
                 throw new ArgumentNullException("cipherText");
+            }
+
             if (parkey == null || parkey.Length <= 0)
+            {
                 throw new ArgumentNullException("Key");
+            }
+
             if (Vector == null || Vector.Length <= 0)
+            {
                 throw new ArgumentNullException("IV");
+            }
 
             string plaintext = null;
 

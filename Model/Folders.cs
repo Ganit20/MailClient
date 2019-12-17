@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace MailClient.Model
 {
-    class Folders
+    internal class Folders
     {
         public string Name { get; set; }
         public int id { get; set; }

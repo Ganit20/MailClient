@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MailClient.Model
+﻿namespace MailClient.Model
 {
     public class User
     {
@@ -11,13 +7,4 @@ namespace MailClient.Model
 
     }
 
-
-
-    //new ConfigModel()
-    //{
-    //    ImapPort = int.Parse(cfg.ImapPort.Text),
-    //                ImapServer = cfg.ImapServer.Text,
-    //                SmtpPort = int.Parse(cfg.SmtpPort.Text),
-    //                SmtpServer = cfg.SmtpServer.Text
-    //            });
 }

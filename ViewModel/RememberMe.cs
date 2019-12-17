@@ -1,31 +1,28 @@
 ﻿using MailClient.Model;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace MailClient.ViewModel
 {
-    class RememberMe
+    internal class RememberMe
     {
         public void Save(User user)
         {
-            var UserData = JsonConvert.SerializeObject(user);
-            var EncryptedUserData = new Encryption().Encrypt(UserData);
-            File.WriteAllBytes("usd.data",EncryptedUserData);
-   
-            
+            string UserData = JsonConvert.SerializeObject(user);
+            byte[] EncryptedUserData = new Encryption().Encrypt(UserData);
+            File.WriteAllBytes("usd.data", EncryptedUserData);
         }
         public User Load()
         {
             try
             {
-                var data = File.ReadAllBytes("usd.data");
-                var DecryptedData = new Encryption().Decrypt(data);
-                var User = JsonConvert.DeserializeObject<User>(DecryptedData);
+                byte[] data = File.ReadAllBytes("usd.data");
+                string DecryptedData = new Encryption().Decrypt(data);
+                User User = JsonConvert.DeserializeObject<User>(DecryptedData);
                 return User;
-            } catch(Exception)
+            }
+            catch (Exception)
             {
                 return null;
             }

@@ -1,13 +1,11 @@
 ﻿using MailClient.Model;
 using MailClient.View;
 using MailClient.ViewModel;
-using Newtonsoft.Json;
-using System.IO;
 using System.Windows;
 
 
 namespace MailClient
-{ 
+{
     public partial class MainWindow : Window
     {
         public static ConfigModel Config;
@@ -16,7 +14,8 @@ namespace MailClient
         {
             InitializeComponent();
             user = new RememberMe().Load();
-            if(user != null){
+            if (user != null)
+            {
                 Email.Text = user.Mail;
                 Password.Password = user.Password;
             }
@@ -25,13 +24,13 @@ namespace MailClient
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var user = new User()
+            User user = new User()
             {
                 Mail = Email.Text,
                 Password = Password.Password
             };
             new Login().ToMail(user, this);
-            if(Remember.IsChecked.Value)
+            if (Remember.IsChecked.Value)
             {
                 new RememberMe().Save(user);
             }
