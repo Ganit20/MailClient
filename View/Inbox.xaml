@@ -68,6 +68,7 @@
             <TextBlock x:Name="Unread"  x:FieldModifier="public" />
             <ComboBox x:Name="Load" Margin="0,0,0,0" Grid.Column="1" Grid.ColumnSpan="3"  SelectionChanged="Load_SelectionChanged"/>
             <TextBlock x:Name="Loading" x:FieldModifier="public" TextWrapping="Wrap"/>
+            <TextBox TextWrapping="NoWrap" x:Name="Search" Width="120" AcceptsReturn="False" TextChanged="TextBox_TextChanged"/>
         </ToolBar>
         <Grid x:Name="MailBody" x:FieldModifier="public" Visibility="Collapsed" Grid.Row="1" Grid.Column="1" >
             <Grid.RowDefinitions>

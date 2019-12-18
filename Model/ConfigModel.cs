@@ -11,6 +11,7 @@ namespace MailClient.Model
         public static ObservableCollection<int> LoadNumber = new ObservableCollection<int>();
         public ConfigModel()
         {
+            LoadNumber.Add(10);
             LoadNumber.Add(25);
             LoadNumber.Add(50);
             LoadNumber.Add(75);

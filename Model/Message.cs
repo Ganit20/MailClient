@@ -33,7 +33,7 @@ namespace MailClient.Model
         {
             Mails.Add(mail);
         }
-
+        
     }
 
 
