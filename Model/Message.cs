@@ -1,17 +1,24 @@
-﻿using System;
+﻿using MailKit;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media;
 
 namespace MailClient.Model
 {
 
 
-    public class Message
+    public class Message : INotifyPropertyChanged
     {
         public static ObservableCollection<Message> Mails = new ObservableCollection<Message>();
 
+        public static List<UniqueId> SelectedMails = new List<UniqueId>();
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public UniqueId UniqueID { get; set; }
         public int ID { get; set; }
         public string From { get; set; }
         public string FullFrom { get; set; }
@@ -24,7 +31,24 @@ namespace MailClient.Model
         public List<string> Atachment { get; set; }
         public Brush MessageColor { get; set; }
         public DateTimeOffset FullTime { get; set; }
+        public Visibility IsLoadMore { get; set; }
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get { return isSelected; } 
+            set { isSelected = value;
+                RaisePropertyChanged("IsSelected");
+            }
 
+        }
+        private void RaisePropertyChanged(string propName)
+        {
+            try
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            }
+            catch (Exception) { }
+        }
         public static ObservableCollection<Message> GetMailList()
         {
             return Mails;

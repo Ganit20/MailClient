@@ -23,7 +23,7 @@ namespace MailClient.ViewModel
                 List<string> atc = new List<string>();
                 await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
                 client.Authenticate(user.Mail, user.Password);
-                IMailFolder Folder = client.GetFolder(ListMessages.folder.FullName);
+                IMailFolder Folder = client.GetFolder(ListMessages.fold);
                 await Folder.OpenAsync(FolderAccess.ReadWrite);
                 IList<IMessageSummary> msg = Folder.Fetch(new[] { m.ID }, MessageSummaryItems.UniqueId | MessageSummaryItems.BodyStructure | MessageSummaryItems.Envelope);
                 var bodyHTML = (TextPart)Folder.GetBodyPart(msg.First().UniqueId, msg.First().HtmlBody);
@@ -45,8 +45,10 @@ namespace MailClient.ViewModel
                     inboxPage.Info.Text = ($"Subject: {msg.First().Envelope.Subject} \n\rFrom {msg.First().Envelope.From} at {msg.First().Envelope.Date} to {msg.First().Envelope.To}");
                     inboxPage.Body.NavigateToString("<html><head><meta charset='UTF-8'></head>" + bodyHTML.Text + "</html>");
                     inboxPage.MailBody.Visibility = 0;
-                    inboxPage.Back.IsEnabled = true;
+                    inboxPage.Back.Visibility = (Visibility)0;
+                    inboxPage.SelectAll.Visibility = (Visibility)2;
                 }
+                client.Disconnect(true);
             }
 
         }

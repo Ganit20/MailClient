@@ -7,6 +7,8 @@
     <UserSecretsId>a0a7510c-1a58-41ea-bdfa-98603df70761</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.42.0" />
+    <PackageReference Include="Google.Apis.Plus.v1" Version="1.42.0.1627" />
     <PackageReference Include="MailKit" Version="2.4.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

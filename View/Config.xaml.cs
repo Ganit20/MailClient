@@ -36,6 +36,7 @@ namespace MailClient.View
                     SmtpServer = SmtpServer.Text
                 };
                 new Configure().SaveConfig(MainWindow.Config);
+                this.Close();
             }
             else
             {

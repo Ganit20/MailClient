@@ -21,6 +21,7 @@ namespace MailClient.ViewModel
                     client.Authenticate(user.Mail, user.Password);
                     client.Disconnect(true);
                     loginpage.Content = new Inbox(user, Config);
+                    client.Disconnect(true);
 
                 }
                 catch (Exception)
