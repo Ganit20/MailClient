@@ -9,7 +9,7 @@
       Title="Inbox"
       >
 
-
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -19,7 +19,7 @@
             <RowDefinition Height="40.909"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListView  x:Name="Messages" x:FieldModifier="public" Grid.Row="1" Grid.Column=" 1" SelectionChanged="Messages_SelectionChanged" MouseDoubleClick="Messages_MouseDoubleClick" Panel.ZIndex="-1" >
+        <ListView   x:Name="Messages" x:FieldModifier="public" Grid.Row="1" Grid.Column=" 1" SelectionChanged="Messages_SelectionChanged" MouseDoubleClick="Messages_MouseDoubleClick" Panel.ZIndex="-1" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -32,7 +32,35 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding Path=MessageColor}" >
-                                    <CheckBox Click="SelectMessage" Margin="-6,-1,-6,-1" Padding="5,2,5,5" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="{Binding Path=MessageColor}" Visibility="{Binding Path=IsLoadMore}"   IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                    <CheckBox 
+                                        Click="SelectMessage"  
+                                        Padding="5,2,5,5" 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"  
+                                        Background="{Binding Path=MessageColor}" 
+                                        Visibility="{Binding Path=IsLoadMore}"   
+                                        IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                      <GridViewColumn Header="Important">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding Path=MessageColor}" >
+                                    <ToggleButton 
+                                        Click="Favorite"   
+                                        FontFamily="
+                                        Segoe MDL2 Assets"  
+                                        Padding="5,2,5,5" 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"  
+                                        Background="{Binding Path=MessageColor}" 
+                                        Visibility="{Binding Path=IsLoadMore}"  
+                                        IsChecked="{Binding Path=IsFavorite, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        BorderBrush="#00000000">
+                                        &#xE734;
+                                    </ToggleButton>
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -41,7 +69,13 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding Path=MessageColor}" >
-                                    <TextBlock Margin="-15,-1,-6,-1" Padding="5,2,5,5" Grid.Column="0" HorizontalAlignment="Stretch" Text="{Binding Path=Time}" Background="{Binding Path=MessageColor}"/>
+                                    <TextBlock 
+                                        Margin="-15,-1,-6,-1" 
+                                        Padding="5,2,5,5" 
+                                        Grid.Column="0" 
+                                        HorizontalAlignment="Stretch" 
+                                        Text="{Binding Path=Time}" 
+                                        Background="{Binding Path=MessageColor}"/>
                                      </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -50,7 +84,13 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate >
                                 <Grid Background="{Binding Path=MessageColor}">
-                                    <TextBlock Margin="-6,-1,-6,-1" Padding="5,2,5,5" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Path=From}" Background="{Binding Path=MessageColor}"/>
+                                    <TextBlock 
+                                        Margin="-6,-1,-6,-1" 
+                                        Padding="5,2,5,5"
+                                        Grid.Column="1" 
+                                        HorizontalAlignment="Stretch" 
+                                        Text="{Binding Path=From}" 
+                                        Background="{Binding Path=MessageColor}"/>
                                     </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -59,7 +99,12 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding Path=MessageColor}" >
-                                    <TextBlock Margin="-6,-1,-6,-1" Padding="5,2,5,5" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding Path=Subject}" Background="{Binding Path=MessageColor}"/>
+                                    <TextBlock 
+                                        Margin="-6,-1,-6,-1" 
+                                        Padding="5,2,5,5" Grid.Column="2" 
+                                        HorizontalAlignment="Stretch" 
+                                        Text="{Binding Path=Subject}" 
+                                        Background="{Binding Path=MessageColor}"/>
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -71,44 +116,136 @@
 
 
         <ToolBar Grid.Column="2" Background="#FFFFCB39">
-            <CheckBox Click="SelectAllHandler" x:Name="SelectAll" Margin="10,0,10,0" Content="&#xE739;" FontFamily="Segoe MDL2 Assets" ></CheckBox>
-            <Button  Visibility="Collapsed" x:Name="Back" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Click="Button_Click">&#xE830;</Button>
-            <Button  x:Name="Refresh" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Click="Refresh_Button">&#xE72C;</Button>
-            <Label Margin="10,4,10,0">Load:</Label>
-            <TextBlock x:Name="Unread"  x:FieldModifier="public" />
-            <ComboBox x:Name="Load" Margin="0,0,0,0" Grid.Column="1" Grid.ColumnSpan="3"  SelectionChanged="Load_SelectionChanged"/>
-            <TextBlock x:Name="Loading" x:FieldModifier="public" TextWrapping="Wrap"/>
-            <TextBox TextWrapping="NoWrap" x:Name="Search" Width="120" AcceptsReturn="False" TextChanged="TextBox_TextChanged"/>
-            <RadioButton x:Name="SeenFC" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Click="Seen">&#xE8C3;</RadioButton>
-            <RadioButton x:Name="UnseenFC" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Click="Unseen">&#xE715;</RadioButton>
-            <Button x:Name="Move" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" IsEnabled="False" Click="Move_Click">&#59614;</Button>
-            <Button x:Name="Delete" Margin="10,0,10,0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" IsEnabled="False" Click="Delete_Click">&#xE74D;</Button>
+            <CheckBox 
+                Click="SelectAllHandler" 
+                x:Name="SelectAll"
+                Margin="10,0,10,0"
+                Content="&#xE739;"
+                FontFamily="Segoe MDL2 Assets" >
+                
+            </CheckBox>
+            <Button  
+                Visibility="Collapsed"
+                x:Name="Back" 
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Button_Click">
+                &#xE830;
+            </Button>
+            <Button  
+                x:Name="Refresh" 
+                Margin="10,0,10,0"
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Refresh_Button">
+                &#xE72C;
+            </Button>
+            <Label 
+                Margin="10,4,10,0">
+                Load:
+            </Label>
+            <TextBlock
+                x:Name="Unread"  
+                x:FieldModifier="public" />
+            <ComboBox 
+                x:Name="Load" 
+                Margin="0,0,0,0" 
+                Grid.Column="1"
+                Grid.ColumnSpan="3" 
+                SelectionChanged="Load_SelectionChanged"/>
+            <TextBlock 
+                x:Name="Loading" 
+                x:FieldModifier="public" 
+                TextWrapping="Wrap"/>
+            <TextBox 
+                TextWrapping="NoWrap" 
+                x:Name="Search" 
+                Width="120" 
+                AcceptsReturn="False" 
+                TextChanged="TextBox_TextChanged"/>
+            <RadioButton 
+                x:Name="SeenFC" 
+                Margin="10,0,10,0"
+                Grid.Column="0"
+                FontFamily="Segoe MDL2 Assets"
+                Click="Seen">&#xE8C3;
+            </RadioButton>
+            <RadioButton 
+                x:Name="UnseenFC"
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets"
+                Click="Unseen">
+                &#xE715;
+            </RadioButton>
+            <Button 
+                x:Name="Move" 
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets"
+                IsEnabled="False" 
+                Click="Move_Click">
+                &#59614;
+            </Button>
+            <Button 
+                x:Name="Delete"
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                IsEnabled="False" 
+                Click="Delete_Click">
+                &#xE74D;
+            </Button>
         </ToolBar>
-        <Grid x:Name="MailBody" x:FieldModifier="public" Visibility="Collapsed" Grid.Row="1" Grid.Column="1" >
+        <Grid 
+            x:Name="MailBody" 
+            x:FieldModifier="public" 
+            Visibility="Collapsed" 
+            Grid.Row="1" 
+            Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Height="Auto" x:Name="Info" x:FieldModifier="public" Background="#FFC59200" Grid.Row="0"/>
-            <WebBrowser x:Name="Body"  Grid.Row="1"   Panel.ZIndex="0"  ></WebBrowser>
-            <StackPanel Height="Auto" x:Name="Attachments" x:FieldModifier="public" Background="#FFC59200" Grid.Row="2"/>
+            <TextBlock 
+                Height="Auto" 
+                x:Name="Info" 
+                x:FieldModifier="public" 
+                Background="#FFC59200" 
+                Grid.Row="0"/>
+            <WebBrowser 
+                x:Name="Body"  
+                Grid.Row="1"   
+                Panel.ZIndex="0">
+            </WebBrowser>
+            <StackPanel 
+                Height="Auto" 
+                x:Name="Attachments"
+                x:FieldModifier="public" 
+                Background="#FFC59200" 
+                Grid.Row="2"/>
         </Grid>
-        <ListView Grid.Row="1"  x:Name="Folders" x:FieldModifier="public" MouseDoubleClick="Folders_SelectionChanged" Background="#FFFFCB39"  >
+        <ListView 
+            Grid.Row="1" 
+            x:Name="Folders" 
+            x:FieldModifier="public" 
+            MouseDoubleClick="Folders_SelectionChanged" 
+            Background="#FFFFCB39"  >
             <ListView.View>
                 <GridView >
                     <GridViewColumn  Header="Folders" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock HorizontalAlignment="Stretch" Text="{Binding Path=Name}"/>
+                                <TextBlock 
+                                    HorizontalAlignment="Stretch" 
+                                    Text="{Binding Path=Name}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
-
         </ListView>
-        
-
     </Grid>
 </Page>

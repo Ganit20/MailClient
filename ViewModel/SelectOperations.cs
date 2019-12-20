@@ -11,16 +11,17 @@ namespace MailClient.ViewModel
 {
     class SelectOperations
     {
-        public async Task Move(ConfigModel conf, User user,Inbox inboxPage)
+        public async Task Move(ConfigModel conf, User user, Inbox inboxPage)
         {
             var choosed = (Folder)inboxPage.Folders.SelectedItem;
             string folder = String.Empty;
-            if(choosed== null )
+            if (choosed == null)
             {
                 folder = "inbox";
-            }else
+            }
+            else
             {
-                 folder = choosed.Name;
+                folder = choosed.Name;
             }
 
             using (ImapClient client = new ImapClient())
@@ -34,18 +35,18 @@ namespace MailClient.ViewModel
                 var wchoosed = (Folder)select.FolderSelect.SelectedItem;
                 var destiny = client.GetFolder(wchoosed.Name);
                 Folder.MoveTo(Message.SelectedMails, destiny);
-                new ListMessages().Refresh(user,conf,inboxPage);
+                new ListMessages().Refresh(user, conf, inboxPage);
             }
         }
-        public async Task Delete(ConfigModel conf, User user,Inbox inbox)
+        public async Task Delete(ConfigModel conf, User user, Inbox inbox)
         {
-            using(ImapClient client = new ImapClient())
+            using (ImapClient client = new ImapClient())
             {
                 await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
                 client.Authenticate(user.Mail, user.Password);
                 var Folder = client.GetFolder(ListMessages.fold);
                 Folder.Open(MailKit.FolderAccess.ReadWrite);
-               
+
                 if (client.Capabilities.HasFlag(ImapCapabilities.SpecialUse))
                 {
                     Deleting content = new Deleting("Are you sure? Your message will be move into trash folder.");
@@ -66,10 +67,32 @@ namespace MailClient.ViewModel
                     {
                         Folder.AddFlags(Message.SelectedMails, MailKit.MessageFlags.Deleted, false);
                         new ListMessages().Refresh(user, conf, inbox);
-                    }     
+                    }
                 }
-               
-               
+            }
+        }
+        public async Task Favorite( User user, ConfigModel conf, Inbox inbox, UniqueId id)
+        {
+            using (ImapClient client = new ImapClient())
+            {
+                await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
+                client.Authenticate(user.Mail, user.Password);
+                var Folder = client.GetFolder(ListMessages.fold);
+                Folder.Open(MailKit.FolderAccess.ReadWrite);
+                Folder.AddFlags(id, MessageFlags.Flagged, false);
+
+            }
+        }
+        public async Task unFavorite(User user, ConfigModel conf, Inbox inbox, UniqueId id)
+        {
+            using (ImapClient client = new ImapClient())
+            {
+                await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
+                client.Authenticate(user.Mail, user.Password);
+                var Folder = client.GetFolder(ListMessages.fold);
+                Folder.Open(MailKit.FolderAccess.ReadWrite);
+                Folder.RemoveFlags(id, MessageFlags.Flagged, false);
+
             }
         }
     }

@@ -33,6 +33,17 @@ namespace MailClient.Model
         public DateTimeOffset FullTime { get; set; }
         public Visibility IsLoadMore { get; set; }
         private bool isSelected;
+        private bool isFavorite;
+        public bool IsFavorite
+        {
+            get { return isFavorite; }
+            set
+            {
+                isFavorite = value;
+                RaisePropertyChanged("IsSelected");
+            }
+
+        }
         public bool IsSelected
         {
             get { return isSelected; } 

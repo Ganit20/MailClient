@@ -2,9 +2,11 @@
 using MailClient.View;
 using MailKit;
 using MailKit.Net.Imap;
+using Microsoft.Win32;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +18,10 @@ namespace MailClient.ViewModel
 {
     class OpenMail
     {
+        static UniqueId LastOpenId;
         public async Task OpenText(Message m, Inbox inboxPage, User user, ConfigModel conf)
         {
+
             using (ImapClient client = new ImapClient())
             {
                 List<string> atc = new List<string>();
@@ -26,6 +30,7 @@ namespace MailClient.ViewModel
                 IMailFolder Folder = client.GetFolder(ListMessages.fold);
                 await Folder.OpenAsync(FolderAccess.ReadWrite);
                 IList<IMessageSummary> msg = Folder.Fetch(new[] { m.ID }, MessageSummaryItems.UniqueId | MessageSummaryItems.BodyStructure | MessageSummaryItems.Envelope);
+                LastOpenId = msg.First().UniqueId;
                 var bodyHTML = (TextPart)Folder.GetBodyPart(msg.First().UniqueId, msg.First().HtmlBody);
                 inboxPage.Attachments.Children.Clear();
                 Folder.SetFlags(m.ID, MessageFlags.Seen, true);
@@ -34,9 +39,9 @@ namespace MailClient.ViewModel
                 {
                     Button bt = new Button
                     {
-                        Content = attachment.FileName
+                        Content = attachment.FileName,
                     };
-                    bt.Click += new RoutedEventHandler(OpenAttachment);
+                    bt.Click += new RoutedEventHandler(new Inbox(user, conf).OpenAttachment);
                     inboxPage.Attachments.Children.Add(bt);
                 }
 
@@ -52,9 +57,37 @@ namespace MailClient.ViewModel
             }
 
         }
-        private void OpenAttachment(object sender, RoutedEventArgs e)
+        public async Task Attachment(Inbox inboxPage, User user, ConfigModel conf, string Atch, string destination)
         {
+            using (ImapClient client = new ImapClient())
+            {
+                await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
+                client.Authenticate(user.Mail, user.Password);
+                IMailFolder Folder = client.GetFolder(ListMessages.fold);
+                await Folder.OpenAsync(FolderAccess.ReadWrite);
+                IList<IMessageSummary> atc = Folder.Fetch(new[] { LastOpenId }, MessageSummaryItems.Body);
+                var multipart = (BodyPartMultipart)atc.First().Body;
+                var attachment = multipart.BodyParts.OfType<BodyPartBasic>().FirstOrDefault(x => x.FileName == Atch);
+                var file = Folder.GetBodyPart(LastOpenId, attachment);
+               
+                using (var stream = File.Create(destination))
+                {
+                    if (file is MessagePart)
+                    {
+                        var part = (MessagePart)file;
+
+                        part.Message.WriteTo(stream);
+                    }
+                    else
+                    {
+                        var part = (MimePart)file;
+
+                        part.Content.DecodeTo(stream);
+                    }
+                }
+            }
+        }
 
         }
     }
-}
+

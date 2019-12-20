@@ -1,9 +1,11 @@
 ﻿using MailClient.Model;
 using MailClient.ViewModel;
 using MailKit;
+using Microsoft.Win32;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -57,7 +59,7 @@ namespace MailClient.View
             Message choosed = (Message)Messages.SelectedItem;
             if (choosed != null && choosed.Subject == "Load more...")
             {
-                new ListMessages().LoadMore(choosed,this,Config,UserData);
+                new ListMessages().LoadMore(choosed, this, Config, UserData);
             }
             else
             {
@@ -68,7 +70,7 @@ namespace MailClient.View
         private void Folders_SelectionChanged(object sender, MouseButtonEventArgs e)
         {
             var f = (Folder)Folders.SelectedItem;
-            new ListMessages().DownloadMessages(UserData, Config, this,f.Name );
+            new ListMessages().DownloadMessages(UserData, Config, this, f.Name);
         }
 
 
@@ -103,7 +105,7 @@ namespace MailClient.View
                 new ListMessages().DownloadMessages(UserData, Config, this);
 
             }
-            else if(state==0 || state==2)
+            else if (state == 0 || state == 2)
             {
                 SeenFC.IsChecked = false;
                 Message.Mails.Clear();
@@ -111,7 +113,7 @@ namespace MailClient.View
                 ListMessages.loaded = 0;
                 new Search().ShowSeen(this, Config, UserData, ListMessages.ShowMode);
             }
-            
+
         }
 
         private void Seen(object sender, RoutedEventArgs e)
@@ -140,15 +142,16 @@ namespace MailClient.View
         {
             var checkBox = (CheckBox)e.OriginalSource;
             var data = (Message)checkBox.DataContext;
-            if (checkBox.IsChecked==true)
+            if (checkBox.IsChecked == true)
             {
                 Message.SelectedMails.Add(data.UniqueID);
                 Move.IsEnabled = true;
                 Delete.IsEnabled = true;
-            }else
+            }
+            else
             {
                 Message.SelectedMails.Remove(data.UniqueID);
-                if(Message.SelectedMails.Count==0)
+                if (Message.SelectedMails.Count == 0)
                 {
                     Move.IsEnabled = false;
                     Delete.IsEnabled = false;
@@ -158,7 +161,7 @@ namespace MailClient.View
 
         private void Move_Click(object sender, RoutedEventArgs e)
         {
-            new SelectOperations().Move(Config,UserData,this);
+            new SelectOperations().Move(Config, UserData, this);
         }
 
         private void SelectAllHandler(object sender, RoutedEventArgs e)
@@ -167,13 +170,14 @@ namespace MailClient.View
             if (SelectAll.IsChecked == true)
             {
                 Message.SelectedMails.Clear();
-                SelectAll.Content ="\uE73A";
+                SelectAll.Content = "\uE73A";
                 foreach (var msg in Message.Mails)
                 {
                     Message.SelectedMails.Add(msg.UniqueID);
                     msg.IsSelected = true;
                 }
-            } else if(SelectAll.IsChecked==false)
+            }
+            else if (SelectAll.IsChecked == false)
             {
                 Message.SelectedMails.Clear();
                 SelectAll.Content = "\uE739";
@@ -182,13 +186,51 @@ namespace MailClient.View
                     msg.IsSelected = false;
                 }
             }
-          
+
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            new SelectOperations().Delete(Config, UserData,this);
+            new SelectOperations().Delete(Config, UserData, this);
+
+        }
+
+        private void Favorite(object sender, RoutedEventArgs e)
+        {
+            var checkBox = (ToggleButton)e.OriginalSource;
+            var data = (Message)checkBox.DataContext;
+            if (checkBox.IsChecked == true)
+            {
+                checkBox.Content = "\uE735";
+                new SelectOperations().Favorite(UserData, Config, this, data.UniqueID);
+
+            }
+            else
+            {
+                Message.SelectedMails.Remove(data.UniqueID);
+                if (checkBox.IsChecked == false)
+                {
+                    checkBox.Content = "\uE734";
+                    new SelectOperations().unFavorite(UserData, Config, this, data.UniqueID);
+                }
+            }
+        }
+        public void OpenAttachment(object sender, RoutedEventArgs e)
+        {
+
+            var SelectPath = new SaveFileDialog();
             
+            
+            var a = (Button)e.OriginalSource;
+            var b = a.Content.ToString();
+            SelectPath.FileName =b ;
+            var result = SelectPath.ShowDialog();
+            if (result == true)
+            {
+                new OpenMail().Attachment(this, UserData, Config, b, SelectPath.FileName);
+
+            }
+
         }
     }
 }

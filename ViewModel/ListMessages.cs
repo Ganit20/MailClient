@@ -76,7 +76,8 @@ namespace MailClient.ViewModel
                             Time = message.Date.ToString("dd/MM/yyyy") == DateTime.Today.ToString("dd/MM/yyyy") ? message.Date.ToString("HH:mm") : message.Date.ToString("dd/MM/yyyy"),
                             Opened = open,
                             MessageColor = (open == true) ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Color.FromRgb(211, 211, 211)),
-                            IsLoadMore = 0
+                            IsLoadMore = 0,
+                            IsFavorite = message.Flags.Value.HasFlag(MessageFlags.Flagged)
                         }) ;
                     });
                     atc.Clear();
