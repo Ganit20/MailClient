@@ -68,8 +68,13 @@ namespace MailClient.ViewModel
                 IList<IMessageSummary> atc = Folder.Fetch(new[] { LastOpenId }, MessageSummaryItems.Body);
                 var multipart = (BodyPartMultipart)atc.First().Body;
                 var attachment = multipart.BodyParts.OfType<BodyPartBasic>().FirstOrDefault(x => x.FileName == Atch);
-                var file = Folder.GetBodyPart(LastOpenId, attachment);
-               
+                TransferProgress progress = new TransferProgress();
+                    Downloads FileDownload = new Downloads();
+                    FileDownload.Show();
+                var file = Folder.GetBodyPart(LastOpenId, attachment,default,progress);
+                
+                
+
                 using (var stream = File.Create(destination))
                 {
                     if (file is MessagePart)

@@ -17,7 +17,7 @@ namespace MailClient.Model
         public static List<UniqueId> SelectedMails = new List<UniqueId>();
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+       
         public UniqueId UniqueID { get; set; }
         public int ID { get; set; }
         public string From { get; set; }

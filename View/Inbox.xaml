@@ -8,8 +8,13 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Inbox"
       >
+    <Page.Resources>
+        <DataTemplate x:Key="FontDisplay">
+            <TextBlock Text="{Binding}"
+        FontFamily="{Binding}" FontSize="14"/>
+        </DataTemplate>
+    </Page.Resources>
 
-    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -44,7 +49,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                      <GridViewColumn Header="Important">
+                    <GridViewColumn Header="Important">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Background="{Binding Path=MessageColor}" >
@@ -76,7 +81,7 @@
                                         HorizontalAlignment="Stretch" 
                                         Text="{Binding Path=Time}" 
                                         Background="{Binding Path=MessageColor}"/>
-                                     </Grid>
+                                </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -91,7 +96,7 @@
                                         HorizontalAlignment="Stretch" 
                                         Text="{Binding Path=From}" 
                                         Background="{Binding Path=MessageColor}"/>
-                                    </Grid>
+                                </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -109,7 +114,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                                   </GridView>
+                </GridView>
             </ListView.View>
         </ListView>
 
@@ -122,7 +127,7 @@
                 Margin="10,0,10,0"
                 Content="&#xE739;"
                 FontFamily="Segoe MDL2 Assets" >
-                
+
             </CheckBox>
             <Button  
                 Visibility="Collapsed"
@@ -197,6 +202,14 @@
                 Click="Delete_Click">
                 &#xE74D;
             </Button>
+            <Button 
+                x:Name="NewMail"
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="NewMail_Click">
+                &#xE710;
+            </Button>
         </ToolBar>
         <Grid 
             x:Name="MailBody" 
@@ -227,6 +240,140 @@
                 Background="#FFC59200" 
                 Grid.Row="2"/>
         </Grid>
+        <Grid 
+            Visibility="Collapsed"
+            x:Name="NewMessage"
+            x:FieldModifier="public"
+            Background="Gray"
+            Grid.Row="1"
+            Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="15*"/>
+                
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.05*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.05*"/>
+                
+            </Grid.ColumnDefinitions>
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                x:Name="Subject"
+                x:FieldModifier="public"
+></TextBox>
+            <TextBox
+                Grid.Column="1"
+                Grid.Row="3"
+                x:Name="To"
+                x:FieldModifier="public"
+></TextBox>
+            <TextBox
+                Grid.Row="7"
+                Grid.Column="1"
+                x:Name="SendBody"
+               
+                PreviewKeyDown="SendBody_KeyDown"
+                x:FieldModifier="public"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto"
+></TextBox>
+            <ToolBar
+                Grid.Row="5" 
+                Grid.Column="1">
+
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="NewMail_Click">
+                    &#xE723;
+                </Button>
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="HyperLink">
+                        &#xE71B;
+                    </Button>
+
+                <ComboBox 
+                    x:Name="FontList" 
+                    ItemsSource="{Binding}"
+                    x:FieldModifier="public"
+                    ItemTemplate="{StaticResource FontDisplay}"
+                    />
+                <ComboBox 
+                    x:Name="FontSize" 
+                    x:FieldModifier="public"
+                    />
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Italic">
+                    &#xE8DB;
+                </Button>
+
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Bold">
+                    &#xE8DD;
+                </Button>
+
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="UnderLine">
+                    &#xE8DC;
+                </Button>
+
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="AllignLeft">
+                    &#59620;
+                </Button>
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="AllignCenter">
+                    &#xE8E3;
+                
+                </Button>
+                <Button 
+                Margin="0,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="AllignRight">
+                &#xE8E2;
+                </Button>
+                <Button 
+                    FontFamily="Segoe MDL2 Assets"
+                    Margin="0,0,10,0"
+                    Click="Preview">
+                    &#xE8A1;</Button>
+                <Button 
+                    Click="SendMail">
+                    Send
+                </Button>
+
+            </ToolBar>
+        </Grid>
         <ListView 
             Grid.Row="1" 
             x:Name="Folders" 
@@ -247,5 +394,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
     </Grid>
 </Page>

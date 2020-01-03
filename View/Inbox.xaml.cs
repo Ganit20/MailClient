@@ -2,11 +2,13 @@
 using MailClient.ViewModel;
 using MailKit;
 using Microsoft.Win32;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MailClient.View
@@ -24,7 +26,7 @@ namespace MailClient.View
             UserData = user;
             InitializeComponent();
             Folders.ItemsSource = Folder.Folders;
-            Messages.ItemsSource = Message.Mails;
+            Messages.ItemsSource = Model.Message.Mails;
             Task.Factory.StartNew(async () =>
             {
                 await new ListMessages().DownloadFolders(user, Config, this);
@@ -34,16 +36,22 @@ namespace MailClient.View
                 await new ListMessages().DownloadMessages(user, Config, this);
             });
             Load.SelectedIndex = 0;
-            DataContext = Message.GetMailList();
+            DataContext = Model.Message.GetMailList();
+
+            FontList.DataContext = Fonts.SystemFontFamilies;
+            FontList.SelectedIndex=0;
+            new Model.FontSize().addFontSize();
+            FontSize.ItemsSource = Model.FontSize.FontSizeList;
+            FontSize.SelectedIndex = 0;
         }
 
         private void Messages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Message choosed = (Message)Messages.SelectedItem;
+            Model.Message choosed = (Model.Message)Messages.SelectedItem;
             if (choosed != null && choosed.Subject == "Load more...")
             {
                 new ListMessages().LoadMore(choosed, this, Config, UserData);
-                Message.Mails.Remove(choosed);
+                Model.Message.Mails.Remove(choosed);
             }
         }
 
@@ -52,11 +60,12 @@ namespace MailClient.View
             MailBody.Visibility = (Visibility)1;
             Back.Visibility = (Visibility)2;
             SelectAll.Visibility = (Visibility)0;
+            NewMessage.Visibility = (Visibility)2;
         }
 
         private void Messages_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Message choosed = (Message)Messages.SelectedItem;
+            Model.Message choosed = (Model.Message)Messages.SelectedItem;
             if (choosed != null && choosed.Subject == "Load more...")
             {
                 new ListMessages().LoadMore(choosed, this, Config, UserData);
@@ -100,7 +109,7 @@ namespace MailClient.View
             {
                 UnseenFC.IsChecked = false;
                 ListMessages.ShowMode = 0;
-                Message.Mails.Clear();
+                Model.Message.Mails.Clear();
                 ListMessages.loaded = 0;
                 new ListMessages().DownloadMessages(UserData, Config, this);
 
@@ -108,7 +117,7 @@ namespace MailClient.View
             else if (state == 0 || state == 2)
             {
                 SeenFC.IsChecked = false;
-                Message.Mails.Clear();
+                Model.Message.Mails.Clear();
                 ListMessages.ShowMode = 1;
                 ListMessages.loaded = 0;
                 new Search().ShowSeen(this, Config, UserData, ListMessages.ShowMode);
@@ -123,7 +132,7 @@ namespace MailClient.View
             {
                 SeenFC.IsChecked = false;
                 ListMessages.ShowMode = 0;
-                Message.Mails.Clear();
+                Model.Message.Mails.Clear();
                 ListMessages.loaded = 0;
                 new ListMessages().DownloadMessages(UserData, Config, this);
 
@@ -131,7 +140,7 @@ namespace MailClient.View
             else if (state == 0 || state == 1)
             {
                 UnseenFC.IsChecked = false;
-                Message.Mails.Clear();
+                Model.Message.Mails.Clear();
                 ListMessages.ShowMode = 2;
                 ListMessages.loaded = 0;
                 new Search().ShowSeen(this, Config, UserData, ListMessages.ShowMode);
@@ -141,17 +150,17 @@ namespace MailClient.View
         private void SelectMessage(object sender, RoutedEventArgs e)
         {
             var checkBox = (CheckBox)e.OriginalSource;
-            var data = (Message)checkBox.DataContext;
+            var data = (Model.Message)checkBox.DataContext;
             if (checkBox.IsChecked == true)
             {
-                Message.SelectedMails.Add(data.UniqueID);
+                Model.Message.SelectedMails.Add(data.UniqueID);
                 Move.IsEnabled = true;
                 Delete.IsEnabled = true;
             }
             else
             {
-                Message.SelectedMails.Remove(data.UniqueID);
-                if (Message.SelectedMails.Count == 0)
+                Model.Message.SelectedMails.Remove(data.UniqueID);
+                if (Model.Message.SelectedMails.Count == 0)
                 {
                     Move.IsEnabled = false;
                     Delete.IsEnabled = false;
@@ -169,19 +178,19 @@ namespace MailClient.View
 
             if (SelectAll.IsChecked == true)
             {
-                Message.SelectedMails.Clear();
+                Model.Message.SelectedMails.Clear();
                 SelectAll.Content = "\uE73A";
-                foreach (var msg in Message.Mails)
+                foreach (var msg in Model.Message.Mails)
                 {
-                    Message.SelectedMails.Add(msg.UniqueID);
+                    Model.Message.SelectedMails.Add(msg.UniqueID);
                     msg.IsSelected = true;
                 }
             }
             else if (SelectAll.IsChecked == false)
             {
-                Message.SelectedMails.Clear();
+                Model.Message.SelectedMails.Clear();
                 SelectAll.Content = "\uE739";
-                foreach (var msg in Message.Mails)
+                foreach (var msg in Model.Message.Mails)
                 {
                     msg.IsSelected = false;
                 }
@@ -198,7 +207,7 @@ namespace MailClient.View
         private void Favorite(object sender, RoutedEventArgs e)
         {
             var checkBox = (ToggleButton)e.OriginalSource;
-            var data = (Message)checkBox.DataContext;
+            var data = (Model.Message)checkBox.DataContext;
             if (checkBox.IsChecked == true)
             {
                 checkBox.Content = "\uE735";
@@ -207,7 +216,7 @@ namespace MailClient.View
             }
             else
             {
-                Message.SelectedMails.Remove(data.UniqueID);
+                Model.Message.SelectedMails.Remove(data.UniqueID);
                 if (checkBox.IsChecked == false)
                 {
                     checkBox.Content = "\uE734";
@@ -222,7 +231,7 @@ namespace MailClient.View
             
             
             var a = (Button)e.OriginalSource;
-            var b = a.Content.ToString();
+            string b = a.Content.ToString();
             SelectPath.FileName =b ;
             var result = SelectPath.ShowDialog();
             if (result == true)
@@ -230,6 +239,133 @@ namespace MailClient.View
                 new OpenMail().Attachment(this, UserData, Config, b, SelectPath.FileName);
 
             }
+
+        }
+
+        private void NewMail_Click(object sender, RoutedEventArgs e)
+        {
+            Back.Visibility = (Visibility)0;
+            SelectAll.Visibility = (Visibility)2;
+            MailBody.Visibility = (Visibility)2;
+            NewMessage.Visibility = (Visibility)0;
+        }
+
+
+        private void SendMail(object sender, RoutedEventArgs e)
+        {
+            if (To.Text != "" && Subject.Text != "" )
+            {
+                try{
+                    
+                    new SendMail().Send(this, UserData, Config, To.Text, Subject.Text, SendBody.Text);
+                    
+                    info inf = new info("Message Has Been Sent to: " + To.Text);
+                    inf.ShowDialog();
+                    Subject.Text = "";
+                    To.Text = "";
+                    SendBody.Text = "";
+                    NewMessage.Visibility = (Visibility)2;
+                    Back.Visibility = (Visibility)2;
+                    SelectAll.Visibility = (Visibility)0;
+                }
+                catch(Exception exce)
+                {
+                    info inf = new info("Message Could not be Sent \n\r"  +exce.StackTrace);
+                    inf.ShowDialog();
+                }
+            }
+            else
+            {
+                info inf = new info("Fields Cannot be empty");
+                inf.ShowDialog();
+            }
+        }
+
+        private void SendBody_KeyDown(object sender, KeyEventArgs e)
+        {
+            
+            if (e.Key == Key.Return)
+            {
+                SendBody.Text += "<BR>";
+                SendBody.SelectionStart = SendBody.Text.Length;
+                SendBody.SelectionLength = 0;
+            }
+        }
+
+        private void AllignRight(object sender, RoutedEventArgs e)
+        {
+            var sel = SendBody.SelectionStart;
+            var selleng = SendBody.SelectionLength;
+            var html = "<div style='text-align: right;'> ";
+            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</div> ");
+            SendBody.Text = SendBody.Text.Insert(sel,html);
+            SendBody.SelectionStart = sel + html.Length + selleng;
+            SendBody.SelectionLength = 0;
+        }
+
+        private void AllignCenter(object sender, RoutedEventArgs e)
+        {
+            var sel = SendBody.SelectionStart;
+            var selleng = SendBody.SelectionLength;
+            var html = "<div style='text-align: center;'> ";
+            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</div> ");
+            SendBody.Text = SendBody.Text.Insert(sel, html);
+            SendBody.SelectionStart = sel + html.Length + selleng;
+            SendBody.SelectionLength = 0;
+        }
+
+
+        private void AllignLeft(object sender, RoutedEventArgs e)
+        {
+            var sel = SendBody.SelectionStart;
+            var selleng = SendBody.SelectionLength;
+            var html = "<div style='text-align: left;'> ";
+            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</div> ");
+            SendBody.Text = SendBody.Text.Insert(sel, html);
+            SendBody.SelectionStart = sel+ html.Length + selleng;
+            SendBody.SelectionLength = 0;
+        }
+        private void Italic(object sender, RoutedEventArgs e)
+        {
+            var sel = SendBody.SelectionStart;
+            var selleng = SendBody.SelectionLength;
+            var html = "<i>";
+            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</i>");
+            SendBody.Text = SendBody.Text.Insert(sel, html);
+            SendBody.SelectionStart = sel + html.Length + selleng;
+            SendBody.SelectionLength = 0;
+        }
+        private void Bold(object sender, RoutedEventArgs e)
+        {
+            var sel = SendBody.SelectionStart;
+            var selleng = SendBody.SelectionLength;
+            var html = "<b>";
+            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</b>");
+            SendBody.Text = SendBody.Text.Insert(sel, html);
+            SendBody.SelectionStart = sel + html.Length + selleng;
+            SendBody.SelectionLength = 0;
+        }
+        private void UnderLine(object sender, RoutedEventArgs e)
+        {
+            var sel = SendBody.SelectionStart;
+            var selleng = SendBody.SelectionLength;
+            var html = "<U>";
+            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</U>");
+            SendBody.Text = SendBody.Text.Insert(sel, html);
+            SendBody.SelectionStart = sel + html.Length + selleng;
+            SendBody.SelectionLength = 0;
+        }
+        private void Preview(object sender, RoutedEventArgs e)
+        {
+
+                 string font ="<body style='font-family:"+ FontList.SelectedItem.ToString()+";font-size:"+FontSize.SelectedItem+ "';>" + SendBody.Text + "</body>";
+                
+            Preview prevMail = new Preview(font);
+            prevMail.ShowDialog();
+        }
+
+        private void HyperLink(object sender, RoutedEventArgs e)
+        {
 
         }
     }

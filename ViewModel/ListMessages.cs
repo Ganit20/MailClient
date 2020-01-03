@@ -17,10 +17,6 @@ namespace MailClient.ViewModel
         public static int loaded = 0;
         public static int load = 10;
         public static string fold = "Inbox";
-        public static IMailFolder folder;
-        //ShowMode 0 = Show all messages
-        //ShowMode 1 = Show only unseen
-        //ShowMode 2 = Show only seen
         public static short ShowMode = 0;
         public async Task DownloadMessages(User user, ConfigModel conf, Inbox inboxPage, string Folder = null)
         {
@@ -96,6 +92,9 @@ namespace MailClient.ViewModel
             {
                 if (Folder == null)
                 {
+                if (fold != null)
+                    Folder = fold;
+                else
                     Folder = "Inbox";
                 }
                 else

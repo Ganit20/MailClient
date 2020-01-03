@@ -21,7 +21,7 @@ namespace MailClient.ViewModel
             {
                 await client.ConnectAsync(config.ImapServer, config.ImapPort);
                 client.Authenticate(user.Mail, user.Password);
-                var Folder = new ListMessages().GetFold(client, ListMessages.folder.FullName);
+                var Folder = new ListMessages().GetFold(client, ListMessages.fold);
                 await Folder.OpenAsync(FolderAccess.ReadWrite);
                 IList<MailKit.UniqueId> SearchUids;
                 try
@@ -35,7 +35,7 @@ namespace MailClient.ViewModel
                 }
 
                 var msgs = Folder.Fetch(SearchUids, MessageSummaryItems.Envelope | MessageSummaryItems.Flags | MessageSummaryItems.GMailLabels);
-                Message.Mails.Clear();
+                Model.Message.Mails.Clear();
                 new ListMessages().ShowMessages(msgs, inboxPage);
                 client.Disconnect(true);
             }
