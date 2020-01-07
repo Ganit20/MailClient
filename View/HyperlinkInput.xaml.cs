@@ -13,19 +13,24 @@ using System.Windows.Shapes;
 namespace MailClient.View
 {
     /// <summary>
-    /// Interaction logic for Preview.xaml
+    /// Interaction logic for HyperlinkInput.xaml
     /// </summary>
-    public partial class Preview : Window
+    public partial class HyperlinkInput : Window
     {
-        public Preview(string mail)
+        public HyperlinkInput()
         {
             InitializeComponent();
-            if(!string.IsNullOrEmpty(mail))
-            Prev.NavigateToString(mail);
         }
-        public void Update(string body)
+        public string RText { get; set; }
+
+
+        public  void Generate_Hyperlink(object sender, RoutedEventArgs e)
         {
-            Prev.NavigateToString(body);
+            string hyperlink = "<a href='" + Hyperlink.Text + "'>" + Text.Text + "</a>";
+            RText = hyperlink;
+            DialogResult = true;
+            this.Close();
+            
         }
     }
 }

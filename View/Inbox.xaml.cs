@@ -18,13 +18,13 @@ namespace MailClient.View
     {
         private readonly User UserData;
         private readonly ConfigModel Config;
-        private readonly Dispatcher dispatcher;
+        private Preview pouct=null;
         public Inbox(User user, ConfigModel config)
         {
-            dispatcher = Application.Current.Dispatcher;
             Config = config;
             UserData = user;
             InitializeComponent();
+
             Folders.ItemsSource = Folder.Folders;
             Messages.ItemsSource = Model.Message.Mails;
             Task.Factory.StartNew(async () =>
@@ -43,6 +43,7 @@ namespace MailClient.View
             new Model.FontSize().addFontSize();
             FontSize.ItemsSource = Model.FontSize.FontSizeList;
             FontSize.SelectedIndex = 0;
+            ClrPicker_Font.SelectedColor = Colors.Black;
         }
 
         private void Messages_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -256,8 +257,13 @@ namespace MailClient.View
             if (To.Text != "" && Subject.Text != "" )
             {
                 try{
-                    
-                    new SendMail().Send(this, UserData, Config, To.Text, Subject.Text, SendBody.Text);
+                    string body = "<body style='" +
+                "font-family:" + FontList.SelectedItem.ToString() + ";" +
+                "font-size:" + FontSize.SelectedItem + "';" +
+                "color:" + ClrPicker_Font.SelectedColorText + ";>"
+                + SendBody.Text +
+                "</body>";
+                    new SendMail().Send(this, UserData, Config, To.Text, Subject.Text, body);
                     
                     info inf = new info("Message Has Been Sent to: " + To.Text);
                     inf.ShowDialog();
@@ -294,79 +300,100 @@ namespace MailClient.View
 
         private void AllignRight(object sender, RoutedEventArgs e)
         {
-            var sel = SendBody.SelectionStart;
-            var selleng = SendBody.SelectionLength;
-            var html = "<div style='text-align: right;'> ";
-            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</div> ");
-            SendBody.Text = SendBody.Text.Insert(sel,html);
-            SendBody.SelectionStart = sel + html.Length + selleng;
-            SendBody.SelectionLength = 0;
+            new MailCreate().AddMarkup(this, "<div style='text-align:Right'>","</div>");
         }
 
         private void AllignCenter(object sender, RoutedEventArgs e)
         {
-            var sel = SendBody.SelectionStart;
-            var selleng = SendBody.SelectionLength;
-            var html = "<div style='text-align: center;'> ";
-            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</div> ");
-            SendBody.Text = SendBody.Text.Insert(sel, html);
-            SendBody.SelectionStart = sel + html.Length + selleng;
-            SendBody.SelectionLength = 0;
+            new MailCreate().AddMarkup(this, "<div style='text-align:Center'>", "</div>" );
         }
-
-
         private void AllignLeft(object sender, RoutedEventArgs e)
         {
-            var sel = SendBody.SelectionStart;
-            var selleng = SendBody.SelectionLength;
-            var html = "<div style='text-align: left;'> ";
-            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</div> ");
-            SendBody.Text = SendBody.Text.Insert(sel, html);
-            SendBody.SelectionStart = sel+ html.Length + selleng;
-            SendBody.SelectionLength = 0;
+            new MailCreate().AddMarkup(this, "<div style='text-align:Left'>", "</div>");
         }
         private void Italic(object sender, RoutedEventArgs e)
         {
-            var sel = SendBody.SelectionStart;
-            var selleng = SendBody.SelectionLength;
-            var html = "<i>";
-            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</i>");
-            SendBody.Text = SendBody.Text.Insert(sel, html);
-            SendBody.SelectionStart = sel + html.Length + selleng;
-            SendBody.SelectionLength = 0;
+            new MailCreate().AddMarkup(this, "<I>", "</I>");
         }
         private void Bold(object sender, RoutedEventArgs e)
         {
-            var sel = SendBody.SelectionStart;
-            var selleng = SendBody.SelectionLength;
-            var html = "<b>";
-            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</b>");
-            SendBody.Text = SendBody.Text.Insert(sel, html);
-            SendBody.SelectionStart = sel + html.Length + selleng;
-            SendBody.SelectionLength = 0;
+            new MailCreate().AddMarkup(this, "<B>", "</B>");
         }
         private void UnderLine(object sender, RoutedEventArgs e)
         {
-            var sel = SendBody.SelectionStart;
-            var selleng = SendBody.SelectionLength;
-            var html = "<U>";
-            SendBody.Text = SendBody.Text.Insert(sel + selleng, "</U>");
-            SendBody.Text = SendBody.Text.Insert(sel, html);
-            SendBody.SelectionStart = sel + html.Length + selleng;
-            SendBody.SelectionLength = 0;
+            new MailCreate().AddMarkup(this, "<U>", "<U>");
         }
         private void Preview(object sender, RoutedEventArgs e)
         {
-
-                 string font ="<body style='font-family:"+ FontList.SelectedItem.ToString()+";font-size:"+FontSize.SelectedItem+ "';>" + SendBody.Text + "</body>";
-                
-            Preview prevMail = new Preview(font);
-            prevMail.ShowDialog();
+            if (PreviewButton.IsChecked == true)
+            {
+                PreviewWeb.Visibility = (Visibility)0;
+                pout.Visibility = (Visibility)0;
+            }
+            else
+            {
+                PreviewWeb.Visibility = (Visibility)2;
+                pout.Visibility = (Visibility)2;
+                if(pouct!=null)
+                {
+                    pouct.Close();
+                }
+            }
         }
 
         private void HyperLink(object sender, RoutedEventArgs e)
         {
+            HyperlinkInput hl = new HyperlinkInput();
+            hl.ShowDialog();
+            if(hl.DialogResult == true)
+            {
+                var hyperLink = hl.RText;
+                SendBody.Text = SendBody.Text.Insert(SendBody.SelectionStart, hyperLink);
+            }
+            
+        }
 
+        private void ClrPickedFont(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            
+        }
+
+        private void Emoji(object sender, RoutedEventArgs e)
+        {
+           var emoji = new ReadEmoji().Read();
+            var EM = new EmojiChoose(emoji);
+            EM.ShowDialog();
+        }
+
+        private void SendBody_Changed(object sender, TextChangedEventArgs e)
+        {
+            string body = "<body style='" +
+                "font-family:" + FontList.SelectedItem.ToString() + ";" +
+                "font-size:" + FontSize.SelectedItem + ";" +
+                "color:" + ClrPicker_Font.SelectedColorText + ";'>"
+                + SendBody.Text +
+                "</body>";
+            PreviewWeb.NavigateToString(body);
+            if(pouct != null)
+            {
+                pouct.Update(body);
+            }
+
+        }
+
+        private void PreviewOut(object sender, RoutedEventArgs e)
+        {
+            string body = "<body style='" +
+                "font-family:" + FontList.SelectedItem.ToString() + ";" +
+                "font-size:" + FontSize.SelectedItem + ";" +
+                "color:" + ClrPicker_Font.SelectedColorText + ";'>"
+                + SendBody.Text +
+                "</body>";
+            pout.Visibility = (Visibility)2;
+            PreviewWeb.Visibility = (Visibility)2;
+            Preview p = new Preview(body);
+            p.Show();
+            pouct = p;
         }
     }
 }

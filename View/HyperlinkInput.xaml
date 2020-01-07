@@ -1,0 +1,32 @@
+﻿<Window x:Class="MailClient.View.HyperlinkInput"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MailClient.View"
+        mc:Ignorable="d"
+        Title="HyperlinkInput" Height="200" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.3*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Hyperlink" Grid.Row="1" Grid.Column="1"/>
+        <TextBox x:Name="Hyperlink" x:FieldModifier="public" Grid.Row="2" TextWrapping="Wrap" Grid.Column="1"/>
+        <Label Content="Text" Grid.Row="4" Grid.Column="1"/>
+        <TextBox x:Name="Text" x:FieldModifier="public" Grid.Row="5" TextWrapping="Wrap" Grid.Column="1"/>
+        <Button Content="Ok" Click="Generate_Hyperlink" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Right"  MinWidth="80"/>
+    </Grid>
+</Window>

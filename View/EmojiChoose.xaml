@@ -1,12 +1,13 @@
-﻿<Window x:Class="MailClient.View.Preview"
+﻿<Window x:Class="MailClient.View.EmojiChoose"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MailClient.View"
         mc:Ignorable="d"
-        Title="Preview" Height="450" Width="300">
-    <Grid>
-        <WebBrowser x:Name="Prev"/>
+        Title="EmojiChoose" Height="400" Width="400">
+    <Grid x:Name="EmojiList">
+        <ListView x:Name="EmojiListData"  ></ListView>
+
     </Grid>
 </Window>
