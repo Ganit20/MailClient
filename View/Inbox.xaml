@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:MailClient.View"
-      
+      xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="900"
       Title="Inbox"
@@ -290,9 +290,11 @@
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
                 HorizontalScrollBarVisibility="Disabled"
-                VerticalScrollBarVisibility="Auto"
-                
+                VerticalScrollBarVisibility="Auto"         
 ></TextBox>
+            
+            <Rectangle x:FieldModifier="public" x:Name="EmojiProp" Visibility="Collapsed" Height="100"  Width="100" Fill="Black"/>
+            
             <ToolBar
                 Grid.Row="5" 
                 Grid.Column="1">
@@ -374,13 +376,9 @@
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
                 Click="AllignRight">
-                &#xE8E2;
+                    &#xE8E2;
                 </Button>
-                <Button 
-                    FontFamily="Segoe MDL2 Assets"
-                    Margin="0,0,10,0"
-                    Click="Emoji">
-                    &#xE76E;</Button>
+                <emoji:Picker x:Name="EmojiPicker" x:FieldModifier="public" SelectionChanged="EmojiAdd" FontSize="15"></emoji:Picker>
                 <ToggleButton 
                     FontFamily="Segoe MDL2 Assets"
                     Margin="0,0,10,0"
@@ -392,6 +390,7 @@
                     Click="SendMail">
                     Send
                 </Button>
+               
 
             </ToolBar>
         </Grid>

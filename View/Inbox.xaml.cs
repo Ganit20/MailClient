@@ -360,8 +360,11 @@ namespace MailClient.View
 
         private void Emoji(object sender, RoutedEventArgs e)
         {
+            
+
+            EmojiProp.Visibility = (Visibility)0;
            var emoji = new ReadEmoji().Read();
-            var EM = new EmojiChoose(emoji);
+            var EM = new EmojiChoose(emoji,this);
             EM.ShowDialog();
         }
 
@@ -394,6 +397,16 @@ namespace MailClient.View
             Preview p = new Preview(body);
             p.Show();
             pouct = p;
+        }
+
+        private void Picker_SelectionChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+        }
+
+        private void EmojiAdd(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            SendBody.Text += EmojiPicker.Selection;
         }
     }
 }
