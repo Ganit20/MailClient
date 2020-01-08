@@ -2,6 +2,7 @@
 using MailClient.ViewModel;
 using MailKit;
 using Microsoft.Win32;
+using Model;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,6 +45,8 @@ namespace MailClient.View
             FontSize.ItemsSource = Model.FontSize.FontSizeList;
             FontSize.SelectedIndex = 0;
             ClrPicker_Font.SelectedColor = Colors.Black;
+            AttachmentList.ItemsSource = Message.AttachmentList;
+            
         }
 
         private void Messages_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,6 +65,7 @@ namespace MailClient.View
             Back.Visibility = (Visibility)2;
             SelectAll.Visibility = (Visibility)0;
             NewMessage.Visibility = (Visibility)2;
+            Reply.IsEnabled = false;
         }
 
         private void Messages_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -276,7 +280,7 @@ namespace MailClient.View
                 }
                 catch(Exception exce)
                 {
-                    info inf = new info("Message Could not be Sent \n\r"  +exce.StackTrace);
+                    info inf = new info("Message Could not be Sent \n\r"  );
                     inf.ShowDialog();
                 }
             }
@@ -358,15 +362,6 @@ namespace MailClient.View
             
         }
 
-        private void Emoji(object sender, RoutedEventArgs e)
-        {
-            
-
-            EmojiProp.Visibility = (Visibility)0;
-           var emoji = new ReadEmoji().Read();
-            var EM = new EmojiChoose(emoji,this);
-            EM.ShowDialog();
-        }
 
         private void SendBody_Changed(object sender, TextChangedEventArgs e)
         {
@@ -407,6 +402,30 @@ namespace MailClient.View
         private void EmojiAdd(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             SendBody.Text += EmojiPicker.Selection;
+        }
+
+        private void LoadAttachment(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.ShowDialog();
+            Message.AttachmentList.Add(open.FileName);
+        }
+
+        private void DeleteAttachment(object sender, RoutedEventArgs e)
+        {
+            Message.AttachmentList.Remove(((System.Windows.FrameworkElement)e.OriginalSource).DataContext.ToString());
+        }
+
+        private void Reply_Click(object sender, RoutedEventArgs e)
+        {
+           var id = Messages.Items.IndexOf(Messages.SelectedItem);
+           var _messageToReply = Message.Mails[id];
+            new ReplyMessage().Reply(this, _messageToReply,UserData,Config);
+        }
+
+        private void OpenSettings(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

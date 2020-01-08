@@ -7,7 +7,7 @@
       xmlns:local="clr-namespace:MailClient.View"
       xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="900"
+      d:DesignHeight="720 " d:DesignWidth="1280"
       Title="Inbox"
       >
     <Page.Resources>
@@ -24,9 +24,19 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40.909"/>
+            <RowDefinition  MinHeight="40" MaxHeight="70"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <Button 
+            Background="red"
+            BorderBrush="White"
+                x:Name="NewMail" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+            FontSize="40"
+                Click="NewMail_Click">
+            &#xE710; 
+        </Button>
         <ListView   x:Name="Messages" x:FieldModifier="public" Grid.Row="1" Grid.Column=" 1" SelectionChanged="Messages_SelectionChanged" MouseDoubleClick="Messages_MouseDoubleClick" Panel.ZIndex="-1" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -123,7 +133,7 @@
 
 
 
-        <ToolBar Grid.Column="1" Background="#FFFFCB39">
+        <ToolBar FontSize="20" VerticalAlignment="Center" Grid.Column="1" Background="#FFFFCB39">
             <CheckBox 
                 Click="SelectAllHandler" 
                 x:Name="SelectAll"
@@ -205,14 +215,20 @@
                 Click="Delete_Click">
                 &#xE74D;
             </Button>
+            
             <Button 
-                x:Name="NewMail"
+                x:Name="Reply"
                 Margin="10,0,10,0" 
                 Grid.Column="0" 
+                IsEnabled="False"
                 FontFamily="Segoe MDL2 Assets" 
-                Click="NewMail_Click">
-                &#xE710;
+                Click="Reply_Click">
+                &#xE8CA;
             </Button>
+            <Button
+                HorizontalAlignment="Right"
+                   Click="OpenSettings"
+                FontFamily="Segoe MDL2 Assets">&#xE713;</Button>
         </ToolBar>
         <Grid 
             x:Name="MailBody" 
@@ -221,7 +237,7 @@
             Grid.Row="1" 
             Grid.Column="1" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -252,12 +268,13 @@
             Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="15*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="auto"/>
                 
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -271,17 +288,20 @@
                 Grid.Column="1"
                 Watermark="Subject"
                 x:Name="Subject"
+
+                Height="30"
                 x:FieldModifier="public"
 ></xctk:WatermarkTextBox>
             <xctk:WatermarkTextBox
                 Grid.Column="1"
                 Watermark="To"
                 Grid.Row="3"
+                Height="30"
                 x:Name="To"
                 x:FieldModifier="public"
 ></xctk:WatermarkTextBox>
             <TextBox
-                Grid.Row="7"
+                Grid.Row="6"
                 Grid.Column="1"
                 x:Name="SendBody"
                TextChanged="SendBody_Changed"
@@ -290,20 +310,49 @@
                 TextWrapping="Wrap"
                 AcceptsReturn="True"
                 HorizontalScrollBarVisibility="Disabled"
-                VerticalScrollBarVisibility="Auto"         
+                VerticalScrollBarVisibility="Auto"    
 ></TextBox>
-            
+            <ListView 
+                   Grid.Row="7"
+                   Grid.Column="1"
+                   x:Name="AttachmentList"
+                   x:FieldModifier="public"
+                MinHeight="50"
+               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                >
+                <ListView.View>
+                        <GridView>
+                        <GridViewColumn >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                        <GridViewColumn >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{Binding Path=MessageColor}" >
+                                        <Button Click="DeleteAttachment">X</Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             <Rectangle x:FieldModifier="public" x:Name="EmojiProp" Visibility="Collapsed" Height="100"  Width="100" Fill="Black"/>
-            
+
             <ToolBar
                 Grid.Row="5" 
+                MinHeight="20"
+                MaxHeight="40"
                 Grid.Column="1">
-
                 <Button 
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
-                Click="NewMail_Click">
+                Click="LoadAttachment" >
                     &#xE723;
                 </Button>
                 <Button 
@@ -378,7 +427,12 @@
                 Click="AllignRight">
                     &#xE8E2;
                 </Button>
-                <emoji:Picker x:Name="EmojiPicker" x:FieldModifier="public" SelectionChanged="EmojiAdd" FontSize="15"></emoji:Picker>
+                <emoji:Picker 
+                    x:Name="EmojiPicker"
+                    x:FieldModifier="public"
+                    SelectionChanged="EmojiAdd"
+                    FontSize="15">
+                </emoji:Picker>
                 <ToggleButton 
                     FontFamily="Segoe MDL2 Assets"
                     Margin="0,0,10,0"

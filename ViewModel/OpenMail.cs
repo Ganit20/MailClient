@@ -51,6 +51,7 @@ namespace MailClient.ViewModel
                     inboxPage.Body.NavigateToString("<html><head><meta charset='UTF-8'></head>" + bodyHTML.Text + "</html>");
                     inboxPage.MailBody.Visibility = 0;
                     inboxPage.Back.Visibility = (Visibility)0;
+                    inboxPage.Reply.IsEnabled = true;
                     inboxPage.SelectAll.Visibility = (Visibility)2;
                 }
                 client.Disconnect(true);

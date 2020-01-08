@@ -15,6 +15,7 @@ namespace MailClient.Model
         public static ObservableCollection<Message> Mails = new ObservableCollection<Message>();
 
         public static List<UniqueId> SelectedMails = new List<UniqueId>();
+        public static ObservableCollection<string> AttachmentList = new ObservableCollection<string>();
 
         public event PropertyChangedEventHandler PropertyChanged;
        
