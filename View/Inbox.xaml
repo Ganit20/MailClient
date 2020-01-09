@@ -10,7 +10,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="720 " d:DesignWidth="1280"
       Title="Inbox"
-      Background="{Binding color}"
+      Background="{Binding color, UpdateSourceTrigger=PropertyChanged}"
       >
     
     <Page.Resources>
@@ -40,7 +40,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
-                <GridView >
+                <GridView>
                     <GridViewColumn Header="Select">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -130,6 +130,7 @@
 
         <ToolBar x:Name="TopBar" x:FieldModifier="public"  FontSize="{Binding Path=TopToolbarFontSize, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Grid.Column="1" Background="#FFFFCB39">
             <CheckBox 
+                ToolTip="Select All"
                 Click="SelectAllHandler" 
                 x:Name="SelectAll"
                 Margin="10,0,10,0"
@@ -138,6 +139,7 @@
 
             </CheckBox>
             <Button 
+                ToolTip="New Mail"
             BorderBrush="White"
                 x:Name="NewMail" 
                 Grid.Column="0" 
@@ -147,6 +149,7 @@
                 &#xE710;
             </Button>
             <Button  
+                ToolTip="Back"
                 Visibility="Collapsed"
                 x:Name="Back" 
                 Margin="10,0,10,0" 
@@ -156,6 +159,7 @@
                 &#xE830;
             </Button>
             <Button  
+                ToolTip="Refresh"
                 x:Name="Refresh" 
                 Margin="10,0,10,0"
                 Grid.Column="0" 
@@ -168,9 +172,11 @@
                 Load:
             </Label>
             <TextBlock
+                
                 x:Name="Unread"  
                 x:FieldModifier="public" />
             <ComboBox 
+                ToolTip="How much message will be load at once"
                 x:Name="Load" 
                 Margin="0,0,0,0" 
                 Grid.Column="1"
@@ -187,6 +193,7 @@
                 AcceptsReturn="False" 
                 TextChanged="TextBox_TextChanged"/>
             <RadioButton 
+                ToolTip="Show only opened messages"
                 x:Name="SeenFC" 
                 Margin="10,0,10,0"
                 Grid.Column="0"
@@ -194,6 +201,7 @@
                 Click="Seen">&#xE8C3;
             </RadioButton>
             <RadioButton 
+                ToolTip="Show only messages that was not open"
                 x:Name="UnseenFC"
                 Margin="10,0,10,0" 
                 Grid.Column="0" 
@@ -202,6 +210,7 @@
                 &#xE715;
             </RadioButton>
             <Button 
+                ToolTip="Move message to another Folder"
                 x:Name="Move" 
                 Margin="10,0,10,0" 
                 Grid.Column="0" 
@@ -211,6 +220,7 @@
                 &#59614;
             </Button>
             <Button 
+                ToolTip="Delete message or move to Trash"
                 x:Name="Delete"
                 Margin="10,0,10,0" 
                 Grid.Column="0" 
@@ -221,6 +231,7 @@
             </Button>
             
             <Button 
+                ToolTip="Reply"
                 x:Name="Reply"
                 Margin="10,0,10,0" 
                 Grid.Column="0" 
@@ -230,6 +241,7 @@
                 &#xE8CA;
             </Button>
             <Button
+                ToolTip="Settings"
                 HorizontalAlignment="Right"
                    Click="OpenSettings"
                 FontFamily="Segoe MDL2 Assets">&#xE713;</Button>
@@ -317,6 +329,7 @@
                 VerticalScrollBarVisibility="Auto"    
 ></TextBox>
             <ListView 
+                ToolTip="List of attachments"
                    Grid.Row="7"
                    Grid.Column="1"
                    x:Name="AttachmentList"
@@ -345,14 +358,15 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Rectangle x:FieldModifier="public" x:Name="EmojiProp" Visibility="Collapsed" Height="100"  Width="100" Fill="Black"/>
+            
 
             <ToolBar
                 Grid.Row="5" 
                 MinHeight="20"
                 MaxHeight="40"
                 Grid.Column="1">
-                <Button 
+                <Button
+                    ToolTip="Add Attachment to mail"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -360,6 +374,7 @@
                     &#xE723;
                 </Button>
                 <Button 
+                    ToolTip="Add Hyperlink"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -378,7 +393,7 @@
                     x:FieldModifier="public"
                     />
                 <WrapPanel Margin="10,0,10,0" VerticalAlignment="Center">
-                    <Label Content="&#xE8D3;"
+                    <Label ToolTip="Text color" Content="&#xE8D3;"
                        FontFamily="Segoe MDL2 Assets"/>
                     <xctk:ColorPicker 
                     Name="ClrPicker_Font"
@@ -386,6 +401,7 @@
                 />
                 </WrapPanel>
                 <Button 
+                    ToolTip="Italic"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -394,6 +410,7 @@
                 </Button>
 
                 <Button 
+                    ToolTip="Bold"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -402,6 +419,7 @@
                 </Button>
 
                 <Button 
+                    ToolTip="Underline"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -410,6 +428,7 @@
                 </Button>
 
                 <Button 
+                    ToolTip="Left allignment"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -417,6 +436,7 @@
                     &#59620;
                 </Button>
                 <Button 
+                    ToolTip="Align to center"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -425,6 +445,7 @@
                 
                 </Button>
                 <Button 
+                    ToolTip="Right allignment"
                 Margin="0,0,10,0" 
                 Grid.Column="0" 
                 FontFamily="Segoe MDL2 Assets" 
@@ -432,12 +453,14 @@
                     &#xE8E2;
                 </Button>
                 <emoji:Picker 
+                    ToolTip="add emoji"
                     x:Name="EmojiPicker"
                     x:FieldModifier="public"
                     SelectionChanged="EmojiAdd"
                     FontSize="15">
                 </emoji:Picker>
                 <ToggleButton 
+                    ToolTip="Preview"
                     FontFamily="Segoe MDL2 Assets"
                     Margin="0,0,10,0"
                     x:Name="PreviewButton"
@@ -445,6 +468,7 @@
                     &#xE8A1;</ToggleButton>
                 
                 <Button 
+                    ToolTip="Send"
                     Click="SendMail">
                     Send
                 </Button>

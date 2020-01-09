@@ -38,7 +38,6 @@ namespace MailClient.View
             });
             this.DataContext = ActualSettings.Actual;
             Load.SelectedIndex = ActualSettings.Actual.DefaultLoadValue;
-            DataContext = Model.Message.GetMailList();
             FontList.DataContext = Fonts.SystemFontFamilies;
             FontList.SelectedIndex=0;
             new Model.FontSize().addFontSize();

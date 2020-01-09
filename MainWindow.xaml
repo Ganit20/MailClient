@@ -28,8 +28,8 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1" x:FieldModifier="public" x:Name="Email" TextWrapping="Wrap" />
-        <PasswordBox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="1" x:FieldModifier="public" x:Name="Password"/>
+        <TextBox  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1" x:FieldModifier="public" x:Name="Email" Height="50" TextWrapping="NoWrap" />
+        <PasswordBox  HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" x:FieldModifier="public" Height="50" x:Name="Password"/>
         <Button Content="Login in" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="5" Click="Button_Click" Height="33"/>
         <TextBlock x:FieldModifier="public" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="1" x:Name="Info" TextWrapping="Wrap"/>
         <Button Content="Config" Grid.Column="3" Grid.Row="5" Click="Button_Click_1"/>

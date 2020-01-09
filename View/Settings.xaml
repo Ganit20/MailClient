@@ -56,21 +56,25 @@
             <Button Margin="5,5,5,5" Grid.Column="2" Grid.Row="1" Name="CancelButton" Content="Cancel" Click="Cancel"/>
 
         </Grid>
-        <Grid Grid.Row="3" Grid.Column="2">
+        <Grid Grid.Row="3" Grid.Column="2" Background="{Binding color, UpdateSourceTrigger=PropertyChanged}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="0.2*"/>
             </Grid.ColumnDefinitions>
-            <Slider x:Name="Red" Minimum="0" Maximum="255" Value="{Binding RedColor, Mode=TwoWay}" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
-            <Slider x:Name="Green" Grid.Row="1" Minimum="0" Maximum="255" Value="{Binding GreenColor, Mode=TwoWay}" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
-            <Slider x:Name="Blue" Grid.Row="2" Minimum="0" Maximum="255" Value="{Binding BlueColor, Mode=TwoWay}" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
-            <TextBox TextChanged="ColorChange" IsReadOnly="True"  x:Name="RedBox" Grid.Column="1" Text="{Binding Path=Value, ElementName=Red }"  x:FieldModifier="public" />
-            <TextBox TextChanged="ColorChange" IsReadOnly="True" Grid.Row="1"  x:Name="GreenBox" Grid.Column="1" Text="{Binding Path=Value, ElementName=Green }"  x:FieldModifier="public"/>
+            <TextBlock Text="Red" Grid.Row="0"/>
+            <TextBlock Text="Green" Grid.Row="1"/>
+            <TextBlock Text="Blue" Grid.Row="2"/>
+            <Slider x:Name="Red" Minimum="0" Grid.Column="1" Maximum="255" Value="{Binding RedColor, Mode=TwoWay}" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+            <Slider x:Name="Green" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding GreenColor, Mode=TwoWay}" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+            <Slider x:Name="Blue" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" Value="{Binding BlueColor, Mode=TwoWay}" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+            <TextBox TextChanged="ColorChange" IsReadOnly="True"  x:Name="RedBox" Grid.Column="2" Text="{Binding Path=Value, ElementName=Red }"  x:FieldModifier="public" />
+            <TextBox TextChanged="ColorChange" IsReadOnly="True" Grid.Row="1"  x:Name="GreenBox" Grid.Column="2" Text="{Binding Path=Value, ElementName=Green }"  x:FieldModifier="public"/>
             <TextBox TextChanged="ColorChange" IsReadOnly="True" Grid.Row="2"  x:Name="BlueBox" Grid.Column="2" Text="{Binding Path=Value, ElementName=Blue }"  x:FieldModifier="public"/>
         </Grid>
        
