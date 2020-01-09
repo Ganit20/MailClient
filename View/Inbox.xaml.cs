@@ -25,7 +25,7 @@ namespace MailClient.View
             Config = config;
             UserData = user;
             InitializeComponent();
-
+            ActualSettings.Actual = new LoadSettings().Read();
             Folders.ItemsSource = Folder.Folders;
             Messages.ItemsSource = Model.Message.Mails;
             Task.Factory.StartNew(async () =>
@@ -36,9 +36,9 @@ namespace MailClient.View
             {
                 await new ListMessages().DownloadMessages(user, Config, this);
             });
-            Load.SelectedIndex = 0;
+            this.DataContext = ActualSettings.Actual;
+            Load.SelectedIndex = ActualSettings.Actual.DefaultLoadValue;
             DataContext = Model.Message.GetMailList();
-
             FontList.DataContext = Fonts.SystemFontFamilies;
             FontList.SelectedIndex=0;
             new Model.FontSize().addFontSize();
@@ -46,6 +46,8 @@ namespace MailClient.View
             FontSize.SelectedIndex = 0;
             ClrPicker_Font.SelectedColor = Colors.Black;
             AttachmentList.ItemsSource = Message.AttachmentList;
+            TopBar.DataContext = ActualSettings.Actual;
+            Load.DataContext = ActualSettings.Actual;
             
         }
 
@@ -425,7 +427,8 @@ namespace MailClient.View
 
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
-
+            Settings options = new Settings(this);
+            options.ShowDialog();
         }
     }
 }

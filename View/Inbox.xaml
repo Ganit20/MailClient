@@ -6,12 +6,16 @@
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:MailClient.View"
       xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+      xmlns:model="clr-namespace:MailClient.Model"
       mc:Ignorable="d" 
       d:DesignHeight="720 " d:DesignWidth="1280"
       Title="Inbox"
+      Background="{Binding color}"
       >
+    
     <Page.Resources>
         <DataTemplate x:Key="FontDisplay">
+            
             <TextBlock Text="{Binding}"
         FontFamily="{Binding}" FontSize="14"/>
         </DataTemplate>
@@ -27,16 +31,7 @@
             <RowDefinition  MinHeight="40" MaxHeight="70"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button 
-            Background="red"
-            BorderBrush="White"
-                x:Name="NewMail" 
-                Grid.Column="0" 
-                FontFamily="Segoe MDL2 Assets" 
-            FontSize="40"
-                Click="NewMail_Click">
-            &#xE710; 
-        </Button>
+
         <ListView   x:Name="Messages" x:FieldModifier="public" Grid.Row="1" Grid.Column=" 1" SelectionChanged="Messages_SelectionChanged" MouseDoubleClick="Messages_MouseDoubleClick" Panel.ZIndex="-1" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -133,7 +128,7 @@
 
 
 
-        <ToolBar FontSize="20" VerticalAlignment="Center" Grid.Column="1" Background="#FFFFCB39">
+        <ToolBar x:Name="TopBar" x:FieldModifier="public"  FontSize="{Binding Path=TopToolbarFontSize, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Grid.Column="1" Background="#FFFFCB39">
             <CheckBox 
                 Click="SelectAllHandler" 
                 x:Name="SelectAll"
@@ -142,6 +137,15 @@
                 FontFamily="Segoe MDL2 Assets" >
 
             </CheckBox>
+            <Button 
+            BorderBrush="White"
+                x:Name="NewMail" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+            FontSize="25"
+                Click="NewMail_Click">
+                &#xE710;
+            </Button>
             <Button  
                 Visibility="Collapsed"
                 x:Name="Back" 
@@ -453,7 +457,7 @@
             x:Name="Folders" 
             x:FieldModifier="public" 
             MouseDoubleClick="Folders_SelectionChanged" 
-            Background="#FFFFCB39"  >
+            >
             <ListView.View>
                 <GridView >
                     <GridViewColumn  Header="Folders" >
