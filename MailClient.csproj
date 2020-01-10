@@ -17,4 +17,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="WPF.ListViewLayoutManager" Version="1.3.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\NewFolder\" />
+    <Folder Include="ViewModel\NewFolder\" />
+    <Folder Include="View\NewFolder\" />
+  </ItemGroup>
 </Project>

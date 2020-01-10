@@ -1,19 +1,34 @@
 ﻿using MailClient.Model;
-using MailClient.View;
 using MailClient.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
-
-namespace MailClient
+namespace MailClient.View.LoginWindow
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for Login.xaml
+    /// </summary>
+    public partial class Login : Page
     {
         public static ConfigModel Config;
         public static User user;
-        public MainWindow()
+        MainWindow Window;
+        public Login(MainWindow w)
         {
+            Window = w;
             InitializeComponent();
             user = new RememberMe().Load();
+
             if (user != null)
             {
                 Email.Text = user.Mail;
@@ -21,7 +36,6 @@ namespace MailClient
             }
             Config = new Configure().LoadConfig();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             User user = new User()
@@ -29,17 +43,17 @@ namespace MailClient
                 Mail = Email.Text,
                 Password = Password.Password
             };
-            new Login().ToMail(user, this);
+            new ViewModel.Login().ToMail(user, Window,this);
             if (Remember.IsChecked.Value)
             {
                 new RememberMe().Save(user);
             }
+            
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void OpenConfig(object sender, RoutedEventArgs e)
         {
-            Config cfg = new Config(Config);
-            cfg.ShowDialog();
+            Window.LoginPage.Navigate(new Config(Config,Window));
         }
     }
 }

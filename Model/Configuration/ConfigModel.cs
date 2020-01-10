@@ -10,7 +10,8 @@ namespace MailClient.Model
         public int SmtpPort { get; set; }
         public static ObservableCollection<int> LoadNumber = new ObservableCollection<int>();
         public ConfigModel()
-        {
+        { 
+            LoadNumber.Add(0);
             LoadNumber.Add(10);
             LoadNumber.Add(25);
             LoadNumber.Add(50);

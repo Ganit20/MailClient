@@ -1,5 +1,6 @@
 ﻿using MailClient.Model;
 using MailClient.View;
+using MailClient.View.InboxWindow;
 using MailKit.Net.Imap;
 using MimeKit;
 using System.Linq;
@@ -9,10 +10,9 @@ namespace Model
 {
     internal class ReplyMessage
     { 
-        public void Reply(Inbox inbox, Message messageToReply,User user, ConfigModel config)
+        public void Reply(NewMessage inbox, Message messageToReply,User user, ConfigModel config)
         {
-            inbox.MailBody.Visibility = (Visibility)2;
-            inbox.NewMessage.Visibility = (Visibility)0;
+            
             using (var client = new ImapClient()) {
                 client.Connect(config.ImapServer, config.ImapPort);
                 client.Authenticate(user.Mail,user.Password);

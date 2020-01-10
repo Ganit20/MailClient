@@ -2,6 +2,7 @@
 using MailClient.ViewModel;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MailClient.View
@@ -9,10 +10,12 @@ namespace MailClient.View
     /// <summary>
     /// Interaction logic for Config.xaml
     /// </summary>
-    public partial class Config : Window
+    public partial class Config : Page
     {
-        public Config(ConfigModel config)
+        MainWindow Window;
+        public Config(ConfigModel config,MainWindow w)
         {
+            Window = w;
             InitializeComponent();
             if (config != null)
             {
@@ -28,15 +31,15 @@ namespace MailClient.View
             if (!string.IsNullOrEmpty(ImapServer.Text) || string.IsNullOrEmpty(ImapPort.Text) || string.IsNullOrEmpty(SmtpPort.Text) || string.IsNullOrEmpty(SmtpServer.Text))
             {
 
-                MainWindow.Config = new ConfigModel()
+                LoginWindow.Login.Config = new ConfigModel()
                 {
                     ImapPort = int.Parse(ImapPort.Text),
                     ImapServer = ImapServer.Text,
                     SmtpPort = int.Parse(SmtpPort.Text),
                     SmtpServer = SmtpServer.Text
                 };
-                new Configure().SaveConfig(MainWindow.Config);
-                this.Close();
+                new Configure().SaveConfig(LoginWindow.Login.Config);
+                Window.LoginPage.NavigationService.GoBack();
             }
             else
             {

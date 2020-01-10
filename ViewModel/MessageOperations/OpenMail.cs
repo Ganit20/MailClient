@@ -1,5 +1,6 @@
 ﻿using MailClient.Model;
 using MailClient.View;
+using MailClient.View.InboxWindow;
 using MailKit;
 using MailKit.Net.Imap;
 using Microsoft.Win32;
@@ -19,7 +20,7 @@ namespace MailClient.ViewModel
     class OpenMail
     {
         static UniqueId LastOpenId;
-        public async Task OpenText(Message m, Inbox inboxPage, User user, ConfigModel conf)
+        public async Task OpenText(Message m, OpenMessage Page, User user, ConfigModel conf)
         {
 
             using (ImapClient client = new ImapClient())
@@ -32,7 +33,10 @@ namespace MailClient.ViewModel
                 IList<IMessageSummary> msg = Folder.Fetch(new[] { m.ID }, MessageSummaryItems.UniqueId | MessageSummaryItems.BodyStructure | MessageSummaryItems.Envelope);
                 LastOpenId = msg.First().UniqueId;
                 var bodyHTML = (TextPart)Folder.GetBodyPart(msg.First().UniqueId, msg.First().HtmlBody);
-                inboxPage.Attachments.Children.Clear();
+                Page.Dispatcher.Invoke(() =>
+                {
+                    Page.Attachments.Children.Clear();
+                });
                 Folder.SetFlags(m.ID, MessageFlags.Seen, true);
                 m.MessageColor = new SolidColorBrush(Colors.White);
                 foreach (BodyPartBasic attachment in msg.First().Attachments)
@@ -41,24 +45,27 @@ namespace MailClient.ViewModel
                     {
                         Content = attachment.FileName,
                     };
-                    bt.Click += new RoutedEventHandler(new Inbox(user, conf).OpenAttachment);
-                    inboxPage.Attachments.Children.Add(bt);
+                    Page.Dispatcher.Invoke(() =>
+                    {
+                        bt.Click += new RoutedEventHandler(new MailWindow(user, conf).OpenAttachment);
+                        Page.Attachments.Children.Add(bt);
+                    });
                 }
 
                 if (m != null)
                 {
-                    inboxPage.Info.Text = ($"Subject: {msg.First().Envelope.Subject} \n\rFrom {msg.First().Envelope.From} at {msg.First().Envelope.Date} to {msg.First().Envelope.To}");
-                    inboxPage.Body.NavigateToString("<html><head><meta charset='UTF-8'></head>" + bodyHTML.Text + "</html>");
-                    inboxPage.MailBody.Visibility = 0;
-                    inboxPage.Back.Visibility = (Visibility)0;
-                    inboxPage.Reply.IsEnabled = true;
-                    inboxPage.SelectAll.Visibility = (Visibility)2;
+                    Page.Dispatcher.Invoke(() =>
+                    {
+                        Page.Info.Text = ($"Subject: {msg.First().Envelope.Subject} \n\rFrom {msg.First().Envelope.From} at {msg.First().Envelope.Date} to {msg.First().Envelope.To}");
+                        Page.Body.NavigateToString("<html><head><meta charset='UTF-8'></head>" + bodyHTML.Text + "</html>");
+                        Page.MailBody.Visibility = 0;
+                    });
                 }
                 client.Disconnect(true);
             }
 
         }
-        public async Task Attachment(Inbox inboxPage, User user, ConfigModel conf, string Atch, string destination)
+        public async Task Attachment(MailWindow inboxPage, User user, ConfigModel conf, string Atch, string destination)
         {
             using (ImapClient client = new ImapClient())
             {

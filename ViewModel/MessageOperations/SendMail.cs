@@ -10,7 +10,7 @@ namespace MailClient.ViewModel
 {
     class SendMail
     {
-        public void Send(Inbox Page, User user, ConfigModel cfg, string to, string subject,string msg)
+        public void Send(MailWindow Page, User user, ConfigModel cfg, string to, string subject,string msg)
         {
             var message = new MimeMessage();
 

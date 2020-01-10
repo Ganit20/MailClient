@@ -15,10 +15,10 @@ namespace MailClient.ViewModel
     internal class ListMessages
     {
         public static int loaded = 0;
-        public static int load = 10;
+        public static int load = ConfigModel.LoadNumber.IndexOf(ActualSettings.Actual.DefaultLoadValue);
         public static string fold = "Inbox";
         public static short ShowMode = 0;
-        public async Task DownloadMessages(User user, ConfigModel conf, Inbox inboxPage, string Folder = null)
+        public async Task DownloadMessages(User user, ConfigModel conf, MailWindow inboxPage, string Folder = null)
         {
             using (ImapClient client = new ImapClient())
             {
@@ -50,7 +50,7 @@ namespace MailClient.ViewModel
 
                 }
             }
-            public async Task ShowMessages(IList<IMessageSummary> messages, Inbox inboxPage,string EndToken = null)
+            public async Task ShowMessages(IList<IMessageSummary> messages, MailWindow inboxPage,string EndToken = null)
             {
                 List<string> atc = new List<string>();
                 foreach (IMessageSummary message in messages)
@@ -118,7 +118,7 @@ namespace MailClient.ViewModel
                 }
                 return isopen;
             }
-            public void Refresh(User user, ConfigModel conf, Inbox inboxPage)
+            public void Refresh(User user, ConfigModel conf, MailWindow inboxPage)
             {
 
                 loaded = 0;
@@ -140,7 +140,7 @@ namespace MailClient.ViewModel
 
               
             }
-            public async Task DownloadFolders(User user, ConfigModel conf, Inbox InboxPage)
+            public async Task DownloadFolders(User user, ConfigModel conf, MailWindow InboxPage)
             {
                 using (ImapClient client = new ImapClient())
                 {
@@ -162,7 +162,7 @@ namespace MailClient.ViewModel
                     client.Disconnect(true);
                 }
             }
-            public void LoadMore(Message choosed, Inbox inboxPage, ConfigModel conf, User user)
+            public void LoadMore(Message choosed, MailWindow inboxPage, ConfigModel conf, User user)
             {
                 //ShowMode 0 = Show all messages
                 //ShowMode 1 = Show only unseen

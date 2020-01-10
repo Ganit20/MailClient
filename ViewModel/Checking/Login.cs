@@ -10,9 +10,9 @@ namespace MailClient.ViewModel
     internal class Login
     {
 
-        public async void ToMail(User user, MainWindow loginpage)
+        public async void ToMail(User user, MainWindow loginWindow,View.LoginWindow.Login loginpage)
         {
-            ConfigModel Config = MainWindow.Config;
+            ConfigModel Config = View.LoginWindow.Login.Config;
             using(SmtpClient sclient = new SmtpClient())
             {
                 try
@@ -29,8 +29,10 @@ namespace MailClient.ViewModel
                             await client.ConnectAsync(Config.ImapServer, Config.ImapPort);
                             client.Authenticate(user.Mail, user.Password);
                             client.Disconnect(true);
-                            loginpage.Content = new Inbox(user, Config);
-                            client.Disconnect(true);
+                            MailWindow mail = new MailWindow(user, Config);
+                            mail.Show();
+                            loginWindow.Close();
+                           
 
                         }
                         catch (Exception)

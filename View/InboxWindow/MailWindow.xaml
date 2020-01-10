@@ -1,0 +1,169 @@
+﻿<Window x:Class="MailClient.View.MailWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:local="clr-namespace:MailClient.View"
+      xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+      xmlns:model="clr-namespace:MailClient.Model"
+      mc:Ignorable="d" 
+      d:DesignHeight="720 " d:DesignWidth="1280"
+      Title="Inbox"
+      Background="{Binding color, UpdateSourceTrigger=PropertyChanged}"
+      >
+    
+ 
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition  MinHeight="40" MaxHeight="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ToolBar x:Name="TopBar"  Background="{Binding color, UpdateSourceTrigger=PropertyChanged}" x:FieldModifier="public"  FontSize="{Binding Path=TopToolbarFontSize, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Grid.Column="1" >
+            <CheckBox 
+                ToolTip="Select All"
+                Click="SelectAllHandler" 
+                x:Name="SelectAll"
+                Margin="10,0,10,0"
+                Content="&#xE739;"
+                FontFamily="Segoe MDL2 Assets" >
+            </CheckBox>
+            <Button  
+                ToolTip="Back"
+                x:Name="Back" 
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Button_Click">
+                &#xE830;
+            </Button>
+            <Button 
+                ToolTip="New Mail"
+            BorderBrush="White"
+                x:Name="NewMail" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="NewMail_Click">
+                &#xE710;
+            </Button>
+
+            <Button  
+                ToolTip="Refresh"
+                x:Name="Refresh" 
+                Margin="10,0,10,0"
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Refresh_Button">
+                &#xE72C;
+            </Button>
+            <Label 
+                Margin="10,4,10,0">
+                Load:
+            </Label>
+            <TextBlock
+                
+                x:Name="Unread"  
+                x:FieldModifier="public" />
+            <ComboBox 
+                ToolTip="How much message will be load at once"
+                x:Name="Load" 
+                Margin="0,0,0,0" 
+                Grid.Column="1"
+                Grid.ColumnSpan="3" 
+                SelectionChanged="Load_SelectionChanged"/>
+            <TextBlock 
+                x:Name="Loading" 
+                x:FieldModifier="public" 
+                TextWrapping="Wrap"/>
+            <TextBox 
+                TextWrapping="NoWrap" 
+                x:Name="Search" 
+                Width="120" 
+                AcceptsReturn="False" 
+                TextChanged="TextBox_TextChanged"/>
+            <RadioButton 
+                ToolTip="Show only opened messages"
+                x:Name="SeenFC" 
+                Margin="10,0,10,0"
+                Grid.Column="0"
+                FontFamily="Segoe MDL2 Assets"
+                Click="Seen">&#xE8C3;
+            </RadioButton>
+            <RadioButton 
+                ToolTip="Show only messages that was not open"
+                x:Name="UnseenFC"
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets"
+                Click="Unseen">
+                &#xE715;
+            </RadioButton>
+            <Button 
+                ToolTip="Move message to another Folder"
+                x:Name="Move" 
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets"
+                IsEnabled="False" 
+                Click="Move_Click">
+                &#59614;
+            </Button>
+            <Button 
+                ToolTip="Delete message or move to Trash"
+                x:Name="Delete"
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                FontFamily="Segoe MDL2 Assets" 
+                IsEnabled="False" 
+                Click="Delete_Click">
+                &#xE74D;
+            </Button>
+
+            <Button 
+                ToolTip="Reply"
+                x:Name="Reply"
+                Margin="10,0,10,0" 
+                Grid.Column="0" 
+                IsEnabled="False"
+                FontFamily="Segoe MDL2 Assets" 
+                Click="Reply_Click">
+                &#xE8CA;
+            </Button>
+            <Button
+                ToolTip="Settings"
+                HorizontalAlignment="Right"
+                   Click="OpenSettings"
+                FontFamily="Segoe MDL2 Assets">&#xE713;</Button>
+        </ToolBar>
+        <ListView 
+            Grid.Row="1" 
+            x:Name="Folders" 
+            x:FieldModifier="public" 
+            MouseDoubleClick="Folders_SelectionChanged" 
+             Background="{Binding color, UpdateSourceTrigger=PropertyChanged}"
+            >
+            <ListView.View>
+                <GridView >
+                    <GridViewColumn  Header="Folders" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    HorizontalAlignment="Stretch" 
+                                    Text="{Binding Path=Name}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Frame Grid.Row="1" Grid.Column="1" x:Name="MainFrame"/>
+          </Grid>
+
+</Window>

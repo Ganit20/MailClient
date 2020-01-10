@@ -1,4 +1,5 @@
 ﻿using MailClient.View;
+using MailClient.View.InboxWindow;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +8,7 @@ namespace MailClient.Model
 {
     class MailCreate
     {
-        public void AddAllign(Inbox Page,string position)
+        public void AddAllign(NewMessage Page,string position)
         {
             var sel = Page.SendBody.SelectionStart;
             var selleng = Page.SendBody.SelectionLength;
@@ -17,7 +18,7 @@ namespace MailClient.Model
             Page.SendBody.SelectionStart = sel + html.Length + selleng;
             Page.SendBody.SelectionLength = 0;
         }
-        public void AddMarkup(Inbox Page, string Markup,string MarkupEnd)
+        public void AddMarkup(NewMessage Page, string Markup,string MarkupEnd)
         {
             var sel = Page.SendBody.SelectionStart;
             var selleng = Page.SendBody.SelectionLength;

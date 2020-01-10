@@ -15,7 +15,7 @@ namespace MailClient.ViewModel
 {
     class Search
     {
-        public async Task SearchMessageAsync(User user, ConfigModel config, Inbox inboxPage, string Text)
+        public async Task SearchMessageAsync(User user, ConfigModel config, MailWindow inboxPage, string Text)
         {
             using (ImapClient client = new ImapClient())
             {
@@ -43,7 +43,7 @@ namespace MailClient.ViewModel
         }
 
 
-        public async Task ShowSeen(Inbox inboxPage,ConfigModel config,User user,short Mode)
+        public async Task ShowSeen(MailWindow inboxPage,ConfigModel config,User user,short Mode)
         {
             using (ImapClient client = new ImapClient())
             {

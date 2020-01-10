@@ -1,0 +1,31 @@
+﻿
+<Window x:Class="MailClient.View.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MailClient.View"
+        xmlns:local1="clr-namespace:MailClient.Model"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        
+        <ListView Grid.Column="1">
+            <ListView.Items>
+                <Button Content="Page" Click="Page"/>
+            </ListView.Items>
+        </ListView>
+        <Frame Grid.Column="2" x:Name="SettingsPanel"/>
+        <!--GraphicSettings-->
+        
+        
+        <!--GraphicSettings END-->
+    </Grid>
+</Window>

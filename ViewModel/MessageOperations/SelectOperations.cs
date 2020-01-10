@@ -11,7 +11,7 @@ namespace MailClient.ViewModel
 {
     class SelectOperations
     {
-        public async Task Move(ConfigModel conf, User user, Inbox inboxPage)
+        public async Task Move(ConfigModel conf, User user, MailWindow inboxPage)
         {
             var choosed = (Folder)inboxPage.Folders.SelectedItem;
             string folder = String.Empty;
@@ -38,7 +38,7 @@ namespace MailClient.ViewModel
                 new ListMessages().Refresh(user, conf, inboxPage);
             }
         }
-        public async Task Delete(ConfigModel conf, User user, Inbox inbox)
+        public async Task Delete(ConfigModel conf, User user, MailWindow inbox)
         {
             using (ImapClient client = new ImapClient())
             {
@@ -71,7 +71,7 @@ namespace MailClient.ViewModel
                 }
             }
         }
-        public async Task Favorite( User user, ConfigModel conf, Inbox inbox, UniqueId id)
+        public async Task Favorite( User user, ConfigModel conf, UniqueId id)
         {
             using (ImapClient client = new ImapClient())
             {
@@ -83,7 +83,7 @@ namespace MailClient.ViewModel
 
             }
         }
-        public async Task unFavorite(User user, ConfigModel conf, Inbox inbox, UniqueId id)
+        public async Task unFavorite(User user, ConfigModel conf, UniqueId id)
         {
             using (ImapClient client = new ImapClient())
             {
