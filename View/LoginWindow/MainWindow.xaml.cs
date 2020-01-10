@@ -15,5 +15,7 @@ namespace MailClient
             InitializeComponent();
             LoginPage.Navigate(new View.LoginWindow.Login(this));
         }
+
+
     }
 }

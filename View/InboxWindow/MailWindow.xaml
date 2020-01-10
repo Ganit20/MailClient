@@ -12,8 +12,20 @@
       Title="Inbox"
       Background="{Binding color, UpdateSourceTrigger=PropertyChanged}"
       >
-    
- 
+    <Window.Resources>
+        <Style TargetType="{x:Type Frame}">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Frame}">
+                        <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}">
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Name="PART_FrameCP" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,7 +37,6 @@
             <RowDefinition  MinHeight="40" MaxHeight="70"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
         <ToolBar x:Name="TopBar"  Background="{Binding color, UpdateSourceTrigger=PropertyChanged}" x:FieldModifier="public"  FontSize="{Binding Path=TopToolbarFontSize, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Grid.Column="1" >
             <CheckBox 
                 ToolTip="Select All"
@@ -163,7 +174,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Frame Grid.Row="1" Grid.Column="1" x:Name="MainFrame"/>
+        <Frame Grid.Row="1" Grid.Column="1"  x:Name="MainFrame"/>
           </Grid>
 
 </Window>

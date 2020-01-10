@@ -21,12 +21,18 @@ namespace MailClient.View.InboxWindow
     /// </summary>
     public partial class NewMessage : Page
     {
+        public int id = 2;
         MailWindow Window;
         private readonly User UserData;
         private readonly ConfigModel Config;
         private Preview pouct = null;
         public NewMessage(MailWindow w,User user, ConfigModel config)
         {
+            if(w.MainFrame.CanGoBack)
+            {
+                w.Back.IsEnabled = true;
+            }
+            w.frameStatus = 2;
             Window = w;
             Config = config;
             UserData = user;
@@ -74,18 +80,20 @@ namespace MailClient.View.InboxWindow
         }
         private void SendBody_Changed(object sender, TextChangedEventArgs e)
         {
-            string body = "<body style='" +
-                "font-family:" + FontList.SelectedItem.ToString() + ";" +
-                "font-size:" + FontSize.SelectedItem + ";" +
-                "color:" + ClrPicker_Font.SelectedColorText + ";'>"
-                + SendBody.Text +
-                "</body>";
-            PreviewWeb.NavigateToString(body);
-            if (pouct != null)
+            if (FontList.SelectedItem != null)
             {
-                pouct.Update(body);
+                string body = "<body style='" +
+                     "font-family:" + FontList.SelectedItem.ToString() + ";" +
+                     "font-size:" + FontSize.SelectedItem + ";" +
+                     "color:" + ClrPicker_Font.SelectedColorText + ";'>"
+                     + SendBody.Text +
+                     "</body>";
+                PreviewWeb.NavigateToString(body);
+                if (pouct != null)
+                {
+                    pouct.Update(body);
+                }
             }
-
         }
         private void HyperLink(object sender, RoutedEventArgs e)
         {

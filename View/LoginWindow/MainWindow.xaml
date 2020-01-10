@@ -6,6 +6,6 @@
         xmlns:local="clr-namespace:MailClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="600 " Width="400">
-    <Frame x:Name="LoginPage"/>
+    <Frame  x:Name="LoginPage"/>
    
 </Window>

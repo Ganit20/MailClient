@@ -5,6 +5,9 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <UserSecretsId>a0a7510c-1a58-41ea-bdfa-98603df70761</UserSecretsId>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Bartlomiej Sulek</Authors>
+    <Company>Ganit</Company>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Emoji.Wpf" Version="0.0.19-experimental" />

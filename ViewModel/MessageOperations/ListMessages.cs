@@ -22,7 +22,7 @@ namespace MailClient.ViewModel
         {
             using (ImapClient client = new ImapClient())
             {
-                 if(load<10) load=10;
+                 if(load<10) load=ActualSettings.Actual.DefaultLoadValue;
                 await client.ConnectAsync(conf.ImapServer, conf.ImapPort);
                 client.Authenticate(user.Mail, user.Password);
                 List<int> uids = new List<int>();
@@ -80,10 +80,11 @@ namespace MailClient.ViewModel
                 }
                 inboxPage.Dispatcher.Invoke(() =>
                 {
-                    if(EndToken==null)
-                    new Message().AddMail(new Message() { 
-                        Subject = "Load more..." ,
-                    IsLoadMore=(Visibility)2});
+                    if (EndToken == null)
+                        new Message().AddMail(new Message() {
+                            Subject = "Load more...",
+                            MessageColor = ActualSettings.Actual.color,
+                        IsLoadMore = (Visibility)2 }) ;
                     inboxPage.Load.ItemsSource = ConfigModel.LoadNumber;
                 });
                 loaded += load;
@@ -123,7 +124,7 @@ namespace MailClient.ViewModel
 
                 loaded = 0;
                 Message.Mails.Clear();
-                Folder.Folders.Clear();
+                
                 new ListMessages().DownloadFolders(user, conf, inboxPage);
             if (ShowMode == 0)
                 {
@@ -144,7 +145,8 @@ namespace MailClient.ViewModel
             {
                 using (ImapClient client = new ImapClient())
                 {
-                    client.Connect(conf.ImapServer, conf.ImapPort);
+                Folder.Folders.Clear();
+                client.Connect(conf.ImapServer, conf.ImapPort);
                     client.Authenticate(user.Mail, user.Password);
                     IList<IMailFolder> ClientFolders = client.GetFolders(client.PersonalNamespaces[0]);
 

@@ -20,9 +20,10 @@ namespace MailClient.ViewModel
     class OpenMail
     {
         static UniqueId LastOpenId;
+
         public async Task OpenText(Message m, OpenMessage Page, User user, ConfigModel conf)
         {
-
+            
             using (ImapClient client = new ImapClient())
             {
                 List<string> atc = new List<string>();

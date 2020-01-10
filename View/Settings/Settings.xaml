@@ -19,7 +19,20 @@
         
         <ListView Grid.Column="1">
             <ListView.Items>
-                <Button Content="Page" Click="Page"/>
+                <Button Click="Graphic_click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <TextBlock Text="Graphic Settings" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Click="info_click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <TextBlock Text="Informations" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </ListView.Items>
         </ListView>
         <Frame Grid.Column="2" x:Name="SettingsPanel"/>

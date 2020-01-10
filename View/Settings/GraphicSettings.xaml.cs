@@ -19,6 +19,7 @@ namespace MailClient.View
 
     public partial class GraphicSettings : Page
     {
+      
         ApplicationSettings oldSettings = new ApplicationSettings();
         MailWindow MainWindow;
         Settings Window;
@@ -56,20 +57,16 @@ namespace MailClient.View
     {
     }
 
-    private void SetDefault(object sender, RoutedEventArgs e)
-    {
-        //new SettingSetters().SetDefault(inbox);
-        //ActualSettings.Actual = new LoadSettings().GetDefaultSettings(); 
-    }
+
 
     private void ColorChange(object sender, TextChangedEventArgs e)
     {
-        //if (GreenBox != null && BlueBox != null && RedBox != null)
-        //{
-        //    Brush newcolor = new SolidColorBrush(Color.FromRgb(Convert.ToByte(RedBox.Text), Convert.ToByte(GreenBox.Text), Convert.ToByte(BlueBox.Text)));
-        //    ActualSettings.Actual.color = newcolor;
-        //}
-    }
+            if (GreenBox != null && BlueBox != null && RedBox != null)
+            {
+                Brush newcolor = new SolidColorBrush(Color.FromRgb(Convert.ToByte(RedBox.Text), Convert.ToByte(GreenBox.Text), Convert.ToByte(BlueBox.Text)));
+                ActualSettings.Actual.color = newcolor;
+            }
+        }
 
 }
 }

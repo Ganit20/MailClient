@@ -21,15 +21,25 @@ namespace MailClient.View
     {
         private readonly User UserData;
         private readonly ConfigModel Config;
- 
-        private MessageList MsgList;
+        public MessageList MsgList;
+        private int framestatus;
+        public int frameStatus { get { return framestatus; } 
+            set
+            {
+                FrameStatus(value);
+                framestatus = value;
+            }
+        }
+
         public MailWindow(User user, ConfigModel config)
         {
                 ActualSettings.Actual = new LoadSettings().Read();
             Config = config;
             UserData = user;
             InitializeComponent();
+          
             MainFrame.Navigate(new MessageList(this,Config, UserData));
+           
             Folders.ItemsSource = Folder.Folders;
             this.DataContext = ActualSettings.Actual;
             Load.SelectedIndex = ActualSettings.Actual.DefaultLoadValue;
@@ -44,17 +54,57 @@ namespace MailClient.View
             {
                 await new ListMessages().DownloadMessages(user, Config, this);
             });
-
+            
         }
-        
-
-        
+        void FrameStatus(int status)
+        {
+            //0 means list
+            //1  means Open message
+            //2 means New message
+            switch (status)
+            {
+                case 0:
+                    SelectAll.IsEnabled = true;
+                    Load.IsEnabled = true;
+                    Refresh.IsEnabled = true;
+                    Back.IsEnabled = false;
+                    SeenFC.IsEnabled = true;
+                    UnseenFC.IsEnabled = true;
+                    Delete.IsEnabled = false;
+                    Move.IsEnabled = false;
+                    Reply.IsEnabled = false;
+                    break;
+                case 1:
+                    SelectAll.IsEnabled = false;
+                    Refresh.IsEnabled = false;
+                    Load.IsEnabled = false;
+                    Back.IsEnabled = true;
+                    SeenFC.IsEnabled = false;
+                    UnseenFC.IsEnabled = false;
+                    Delete.IsEnabled = true;
+                    Move.IsEnabled = true;
+                    Reply.IsEnabled = true;
+                    break;
+                case 2:
+                    SelectAll.IsEnabled = false;
+                    Refresh.IsEnabled = false;
+                    Load.IsEnabled = false;
+                    Back.IsEnabled = true;
+                    SeenFC.IsEnabled = false;
+                    UnseenFC.IsEnabled = false;
+                    Delete.IsEnabled = false;
+                    Move.IsEnabled = false;
+                    Reply.IsEnabled = false;
+                    break;
+            }
+        }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Reply.IsEnabled = false;
-            if (MainFrame.CanGoBack)
+            if (MainFrame.CanGoBack) { 
                 MainFrame.NavigationService.GoBack();
+                }
             else
                 Back.IsEnabled = false;
         }

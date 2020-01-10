@@ -23,11 +23,14 @@ namespace MailClient.View.Inbox
     /// </summary>
     public partial class MessageList : Page
     {
+        public int id = 0;
         private readonly User UserData;
         private readonly ConfigModel Config;
         private MailWindow Window;
         public MessageList(MailWindow w,ConfigModel config,User user)
         {
+            w.MsgList = this;
+            w.frameStatus = 0;
             Config = config;
             UserData = user;
             Window = w;
@@ -56,7 +59,7 @@ namespace MailClient.View.Inbox
                 {
                     Window.Dispatcher.Invoke(() =>
                     {
-                        var o = new OpenMessage();
+                        var o = new OpenMessage(Window);
                         Window.MainFrame.Navigate(o);
                         new OpenMail().OpenText(choosed, o, UserData, Config);
 

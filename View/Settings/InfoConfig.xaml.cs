@@ -11,23 +11,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MailClient.View.InboxWindow
+namespace MailClient.View
 {
     /// <summary>
-    /// Interaction logic for OpenMessage.xaml
+    /// Interaction logic for InfoConfig.xaml
     /// </summary>
-    public partial class OpenMessage : Page
+    public partial class InfoConfig : Page
     {
-        public int id = 1;
-        public OpenMessage(MailWindow w)
+        public InfoConfig()
         {
-            
-            w.frameStatus = 1;
             InitializeComponent();
-            if (w.MainFrame.CanGoBack)
-            {
-                w.Back.IsEnabled = true;
-            }
         }
     }
 }
